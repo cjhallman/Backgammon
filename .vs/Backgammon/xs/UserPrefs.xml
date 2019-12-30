@@ -1,0 +1,16 @@
+﻿<Properties StartupConfiguration="{C18058CC-1200-F19A-9E29-1B4B728CB551}|">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/MoveControl.cs">
+    <Files>
+      <File FileName="Assets/StartSetup.cs" Line="9" Column="34" />
+      <File FileName="Assets/SpotControl.cs" Line="118" Column="44" />
+      <File FileName="Assets/MoveControl.cs" Line="196" Column="45" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="Unity.Editor" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
