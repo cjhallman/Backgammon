@@ -4,60 +4,65 @@ using UnityEngine;
 
 public class StartSetup : MonoBehaviour
 {
-    public GameObject[] whitepieces;
-    public GameObject[] blackpieces;
-    public GameObject[] allSpots;
+    public GameObject[] WhitePieces;
+    public GameObject[] BlackPieces;
+    public GameObject[] AllSpots;
+    public CameraControl cam;
     public float y = .15F;
-    public float betweenspots = 1.5833333F;
-    public float initialspot = 1.3F;
-    public float betweenpieces = 1.2F;
-    public float initialpiece = 5.85F;
+    public float BetweenSpots = 1.5833333F;
+    public float InitialSpot = 1.3F;
+    public float BetweenPieces = 1.2F;
+    public float InitialPiece = 5.85F;
+    public MoveControl CurrentMover;
+    public JailControl WhiteJailControl;
+    public BaseControl WhiteBaseControl;
+    public JailControl BlackJailControl;
+    public BaseControl BlackBaseControl;
 
     // Start is called before the first frame update
     void Start()
     {
-        whitepieces[0].transform.position = new Vector3(-1F * initialpiece, y,-1F * (initialspot + 5F * betweenspots));
-        whitepieces[1].transform.position = new Vector3((-1F * initialpiece) + betweenpieces, y, -1F * (initialspot + 5F * betweenspots));
+        WhitePieces[0].transform.position = new Vector3(-1F * InitialPiece, y,-1F * (InitialSpot + 5F * BetweenSpots));
+        WhitePieces[1].transform.position = new Vector3((-1F * InitialPiece) + BetweenPieces, y, -1F * (InitialSpot + 5F * BetweenSpots));
 
-        blackpieces[0].transform.position = new Vector3(initialpiece, y, -1f * (initialspot + 5F * betweenspots));
-        blackpieces[1].transform.position = new Vector3(initialpiece - betweenpieces, y, -1f * (initialspot + 5F * betweenspots));
+        BlackPieces[0].transform.position = new Vector3(InitialPiece, y, -1f * (InitialSpot + 5F * BetweenSpots));
+        BlackPieces[1].transform.position = new Vector3(InitialPiece - BetweenPieces, y, -1f * (InitialSpot + 5F * BetweenSpots));
 
-        whitepieces[2].transform.position = new Vector3(initialpiece, y, -1f * initialspot);
-        whitepieces[3].transform.position = new Vector3(initialpiece - betweenpieces, y, -1f * initialspot);
-        whitepieces[4].transform.position = new Vector3(initialpiece - (2f * betweenpieces), y, -1f * initialspot);
-        whitepieces[5].transform.position = new Vector3(initialpiece - (3f * betweenpieces), y, -1f * initialspot);
-        whitepieces[6].transform.position = new Vector3(initialpiece - (4f * betweenpieces), y, -1f * initialspot);
+        WhitePieces[2].transform.position = new Vector3(InitialPiece, y, -1f * InitialSpot);
+        WhitePieces[3].transform.position = new Vector3(InitialPiece - BetweenPieces, y, -1f * InitialSpot);
+        WhitePieces[4].transform.position = new Vector3(InitialPiece - (2f * BetweenPieces), y, -1f * InitialSpot);
+        WhitePieces[5].transform.position = new Vector3(InitialPiece - (3f * BetweenPieces), y, -1f * InitialSpot);
+        WhitePieces[6].transform.position = new Vector3(InitialPiece - (4f * BetweenPieces), y, -1f * InitialSpot);
 
-        blackpieces[2].transform.position = new Vector3(-1f * initialpiece, y, -1f * initialspot);
-        blackpieces[3].transform.position = new Vector3(-1f * (initialpiece - betweenpieces), y, -1f * initialspot);
-        blackpieces[4].transform.position = new Vector3(-1f * (initialpiece - (2f * betweenpieces)), y, -1f * initialspot);
-        blackpieces[5].transform.position = new Vector3(-1f * (initialpiece - (3f * betweenpieces)), y, -1f * initialspot);
-        blackpieces[6].transform.position = new Vector3(-1f * (initialpiece - (4f * betweenpieces)), y, -1f * initialspot);
+        BlackPieces[2].transform.position = new Vector3(-1f * InitialPiece, y, -1f * InitialSpot);
+        BlackPieces[3].transform.position = new Vector3(-1f * (InitialPiece - BetweenPieces), y, -1f * InitialSpot);
+        BlackPieces[4].transform.position = new Vector3(-1f * (InitialPiece - (2f * BetweenPieces)), y, -1f * InitialSpot);
+        BlackPieces[5].transform.position = new Vector3(-1f * (InitialPiece - (3f * BetweenPieces)), y, -1f * InitialSpot);
+        BlackPieces[6].transform.position = new Vector3(-1f * (InitialPiece - (4f * BetweenPieces)), y, -1f * InitialSpot);
 
-        whitepieces[7].transform.position = new Vector3(initialpiece, y, (initialspot + betweenspots));
-        whitepieces[8].transform.position = new Vector3(initialpiece - betweenpieces, y, (initialspot + betweenspots));
-        whitepieces[9].transform.position = new Vector3(initialpiece - (2f * betweenpieces), y, (initialspot + betweenspots));
+        WhitePieces[7].transform.position = new Vector3(InitialPiece, y, (InitialSpot + BetweenSpots));
+        WhitePieces[8].transform.position = new Vector3(InitialPiece - BetweenPieces, y, (InitialSpot + BetweenSpots));
+        WhitePieces[9].transform.position = new Vector3(InitialPiece - (2f * BetweenPieces), y, (InitialSpot + BetweenSpots));
 
-        blackpieces[7].transform.position = new Vector3(-1f * initialpiece, y, (initialspot + betweenspots));
-        blackpieces[8].transform.position = new Vector3(-1f * (initialpiece - betweenpieces), y, (initialspot + betweenspots));
-        blackpieces[9].transform.position = new Vector3(-1f * (initialpiece - (2f * betweenpieces)), y, (initialspot + betweenspots));
+        BlackPieces[7].transform.position = new Vector3(-1f * InitialPiece, y, (InitialSpot + BetweenSpots));
+        BlackPieces[8].transform.position = new Vector3(-1f * (InitialPiece - BetweenPieces), y, (InitialSpot + BetweenSpots));
+        BlackPieces[9].transform.position = new Vector3(-1f * (InitialPiece - (2f * BetweenPieces)), y, (InitialSpot + BetweenSpots));
 
-        whitepieces[10].transform.position = new Vector3(-1f * initialpiece, y, initialspot + (5f * betweenspots));
-        whitepieces[11].transform.position = new Vector3(-1f * initialpiece + betweenpieces, y, initialspot + (5f * betweenspots));
-        whitepieces[12].transform.position = new Vector3(-1f * initialpiece + (2f * betweenpieces), y, initialspot + (5f * betweenspots));
-        whitepieces[13].transform.position = new Vector3(-1f * initialpiece + (3f * betweenpieces), y, initialspot + (5f * betweenspots));
-        whitepieces[14].transform.position = new Vector3(-1f * initialpiece + (4f * betweenpieces), y, initialspot + (5f * betweenspots));
+        WhitePieces[10].transform.position = new Vector3(-1f * InitialPiece, y, InitialSpot + (5f * BetweenSpots));
+        WhitePieces[11].transform.position = new Vector3(-1f * InitialPiece + BetweenPieces, y, InitialSpot + (5f * BetweenSpots));
+        WhitePieces[12].transform.position = new Vector3(-1f * InitialPiece + (2f * BetweenPieces), y, InitialSpot + (5f * BetweenSpots));
+        WhitePieces[13].transform.position = new Vector3(-1f * InitialPiece + (3f * BetweenPieces), y, InitialSpot + (5f * BetweenSpots));
+        WhitePieces[14].transform.position = new Vector3(-1f * InitialPiece + (4f * BetweenPieces), y, InitialSpot + (5f * BetweenSpots));
 
-        blackpieces[10].transform.position = new Vector3(initialpiece, y, initialspot + (5f * betweenspots));
-        blackpieces[11].transform.position = new Vector3(initialpiece - betweenpieces, y, initialspot + (5f * betweenspots));
-        blackpieces[12].transform.position = new Vector3(initialpiece - (2f * betweenpieces), y, initialspot + (5f * betweenspots));
-        blackpieces[13].transform.position = new Vector3(initialpiece - (3f * betweenpieces), y, initialspot + (5f * betweenspots));
-        blackpieces[14].transform.position = new Vector3(initialpiece - (4f * betweenpieces), y, initialspot + (5f * betweenspots));
+        BlackPieces[10].transform.position = new Vector3(InitialPiece, y, InitialSpot + (5f * BetweenSpots));
+        BlackPieces[11].transform.position = new Vector3(InitialPiece - BetweenPieces, y, InitialSpot + (5f * BetweenSpots));
+        BlackPieces[12].transform.position = new Vector3(InitialPiece - (2f * BetweenPieces), y, InitialSpot + (5f * BetweenSpots));
+        BlackPieces[13].transform.position = new Vector3(InitialPiece - (3f * BetweenPieces), y, InitialSpot + (5f * BetweenSpots));
+        BlackPieces[14].transform.position = new Vector3(InitialPiece - (4f * BetweenPieces), y, InitialSpot + (5f * BetweenSpots));
     }
 
     // Update is called once per frame
     void Update()
     {
-        
     }
 }

@@ -4,32 +4,34 @@ using UnityEngine;
 
 public class SpotControl : MonoBehaviour
 {
-    public bool occupyingcolorisblack;
-    public bool controlled;
-    public int position;
-    public GameObject gamemaster;
-    private GameObject[] allSpots;
-    private List<GameObject>[,] possiblemoves = new List<GameObject>[6,6];
-    public List<GameObject> pieces;
-    public bool changed;
+    public bool OccupyingColorIsBlack;
+    public bool Controlled;
+    public int Position;
+    public StartSetup GameMaster;
+    public GameObject[] AllSpots;
+    public List<GameObject>[,] PossibleMovesWhite = new List<GameObject>[6,6];
+    public List<GameObject>[,] PossibleMovesBlack = new List<GameObject>[6, 6];
+    public List<GameObject> ActualPossMoves = new List<GameObject>();
+    public List<GameObject> Pieces;
+    public bool Changed;
     public float y = .15F;
-    public float betweenspots = 1.5833333F;
-    public float initialspot = 1.3F;
-    public float betweenpieces = 1.2F;
-    public float initialpiece = 5.85F;
+    public float BetweenPieces = 1.2F;
+    public float InitialPiece = 5.85F;
+    public float StackPieces = .2F;
+    private JailControl Jail;
 
     // Start is called before the first frame update
     void Start()
     {
-        changed = false;
+        Position = (int)(((char.GetNumericValue(gameObject.name[4]) - 1) * 6) + char.GetNumericValue(gameObject.name[6]) - 1);
+        Changed = false;
         if (transform.parent.name == "Quadrant1" || transform.parent.name == "Quadrant2")
-            initialpiece = initialpiece * -1;
+            InitialPiece = InitialPiece * -1;
         else
         {
-            betweenpieces = betweenpieces * -1;
+            BetweenPieces = BetweenPieces * -1;
         }
-        StartSetup spotcontainer = gamemaster.GetComponent(typeof(StartSetup)) as StartSetup;
-        allSpots = spotcontainer.allSpots;
+        AllSpots = GameMaster.AllSpots;
         SetControlledVariables();
         CalcPossibleMoves();
     }
@@ -37,36 +39,41 @@ public class SpotControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (changed){
+        if (Changed){
             SetControlledVariables();
-            for (int x=0; x<pieces.Count; x++){
+            for (int x=0; x<Pieces.Count; x++){
                 if (x < 5)
                 {
-                    pieces[x].transform.position = new Vector3(initialpiece + (betweenpieces * x), y, transform.position.z);
+                    Pieces[x].transform.position = new Vector3(InitialPiece + (BetweenPieces * x), y, transform.position.z);
                 }
                 else
                 {
-                    pieces[x].transform.position = new Vector3(initialpiece + (betweenpieces * 5), y, transform.position.z);
-                    MeshRenderer piecerenderer = pieces[x].GetComponent(typeof(MeshRenderer)) as MeshRenderer;
-
-                    piecerenderer.enabled = false;
+                    Pieces[x].transform.position = new Vector3(InitialPiece + (BetweenPieces * (x%5)), y + (StackPieces * (x/5)), transform.position.z);
                 }
 
             }
-            changed = false;
+            Changed = false;
         }
     }
 
     public void AddPiece(GameObject piece)
     {
-        pieces.Add(piece);
-        changed = true;
+        if (Pieces.Count == 1)
+        {
+            if(piece.name[0] == 'B' != OccupyingColorIsBlack)
+            {
+                Jail.AddPiece(Pieces[0]);
+                Pieces.Remove(Pieces[0]);
+            }
+        }
+        Pieces.Add(piece);
+        Changed = true;
     }
 
     public void RemovePiece(GameObject piece)
     {
-        pieces.Remove(piece);
-        changed = true;
+        Pieces.Remove(piece);
+        Changed = true;
     }
 
     private void CalcPossibleMoves()
@@ -75,50 +82,87 @@ public class SpotControl : MonoBehaviour
         {
             for (int roll2 = 1; roll2 < 7; roll2++)
             {
-                if(position + roll1 < 24)
-                {
-                    possiblemoves[roll1 - 1, roll2 - 1].Add(allSpots[position + roll1]);
-                }
-                if (position + roll2 < 24)
-                {
-                    possiblemoves[roll1 - 1, roll2 - 1].Add(allSpots[position + roll2]);
-                }
-                if (position + roll1 + roll2 < 24)
-                {
-                    possiblemoves[roll1 - 1, roll2 - 1].Add(allSpots[position + roll2 + roll1]);
-                }
+                PossibleMovesWhite[roll1 - 1, roll2 - 1] = new List<GameObject>();
+                PossibleMovesBlack[roll1 - 1, roll2 - 1] = new List<GameObject>();
+                if (Position + roll1 < 24)
+                    PossibleMovesWhite[roll1 - 1, roll2 - 1].Add(AllSpots[Position + roll1]);
+                if (Position - roll1 >= 0)
+                    PossibleMovesBlack[roll1 - 1, roll2 - 1].Add(AllSpots[Position - roll1]);
+                if (Position + roll2 < 24 && roll2!=roll1)
+                    PossibleMovesWhite[roll1 - 1, roll2 - 1].Add(AllSpots[Position + roll2]);
+                if (Position - roll2 >= 0 && roll2 != roll1)
+                    PossibleMovesBlack[roll1 - 1, roll2 - 1].Add(AllSpots[Position - roll2]);
             }
         }
     }
 
     private void SetControlledVariables()
     {
-        if(pieces.Count == 0){
-            controlled = false;
-            occupyingcolorisblack = false;
+        if(Pieces.Count == 0){
+            Controlled = false;
+            OccupyingColorIsBlack = false;
         }
         else
         {
-            controlled = pieces.Count > 1;
-            occupyingcolorisblack = (pieces[0].name[0] == 'B');
+            Controlled = Pieces.Count > 1;
+            OccupyingColorIsBlack = (Pieces[0].name[0] == 'B');
+        }
+        if (OccupyingColorIsBlack)
+            Jail = GameMaster.BlackJailControl;
+        else
+            Jail = GameMaster.WhiteJailControl;
+    }
+
+    public void GetPossibleMoves(bool black, int roll1, int roll2)
+    {
+        ActualPossMoves.Clear();
+        if (black == OccupyingColorIsBlack)
+        {
+            List<GameObject> temp;
+            if (!black)
+                temp = PossibleMovesWhite[roll1-1, roll2-1];
+            else
+                temp = PossibleMovesBlack[roll1-1, roll2-1];
+            if (temp.Count != 0)
+            {
+                SpotControl contspot;
+                int counter = 0;
+                foreach (GameObject s in temp)
+                {
+                    contspot = s.GetComponent(typeof(SpotControl)) as SpotControl;
+                    if (!contspot.Controlled || contspot.OccupyingColorIsBlack == OccupyingColorIsBlack)
+                    {
+                        //if doubles add to possible moves if the the increment hasn't been used yet & there are enough available moves before that
+                        if (GameMaster.CurrentMover.Doubles)
+                        {
+                            if (!GameMaster.CurrentMover.RollsUsed[3-counter]&&ActualPossMoves.Count==counter)
+                                ActualPossMoves.Add(s);
+                        }
+                        else {
+                            //If not doubles add to list if the roll hasn't been used and the subsequent moves are available
+                            int spotdiff = Mathf.Abs(contspot.Position - Position);
+                            if (spotdiff == roll1 && !GameMaster.CurrentMover.RollsUsed[0])
+                            {
+                                ActualPossMoves.Add(s);
+                            }
+                            else if (spotdiff == roll2 && !GameMaster.CurrentMover.RollsUsed[1])
+                            {
+                                ActualPossMoves.Add(s);
+                            }
+                            else if (ActualPossMoves.Count > 0 && !(GameMaster.CurrentMover.RollsUsed[0]||GameMaster.CurrentMover.RollsUsed[1]))
+                            {
+                                ActualPossMoves.Add(s);
+                            }
+                        }
+                    }
+                    counter++;
+                }          
+            }   
         }
     }
 
-    public List<GameObject> GetPossibleMoves(int roll1, int roll2)
+    public List<GameObject> GetPieces()
     {
-        List<GameObject> actualpossmoves = new List<GameObject>();
-        if(possiblemoves[roll1,roll2].Count != 0)
-        {
-            SpotControl contspot;
-            foreach (GameObject s in possiblemoves[roll1, roll2])
-            {
-                contspot = s.GetComponent(typeof(SpotControl)) as SpotControl;
-                if(!contspot.controlled || contspot.occupyingcolorisblack == occupyingcolorisblack)
-                {
-                    actualpossmoves.Add(s);
-                }
-            }
-        }
-        return actualpossmoves;
+        return Pieces;
     }
 }

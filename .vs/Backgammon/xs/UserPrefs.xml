@@ -1,16 +1,35 @@
 ﻿<Properties StartupConfiguration="{C18058CC-1200-F19A-9E29-1B4B728CB551}|">
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/MoveControl.cs">
     <Files>
-      <File FileName="Assets/StartSetup.cs" Line="9" Column="34" />
-      <File FileName="Assets/SpotControl.cs" Line="118" Column="44" />
-      <File FileName="Assets/MoveControl.cs" Line="196" Column="45" />
+      <File FileName="Assets/StartSetup.cs" Line="14" Column="27" />
+      <File FileName="Assets/SpotControl.cs" />
+      <File FileName="Assets/MoveControl.cs" Line="182" Column="32" />
+      <File FileName="Assets/CameraControl.cs" />
+      <File FileName="Assets/JailControl.cs" />
+      <File FileName="Assets/BaseControl.cs" />
+      <File FileName="Assets/DiceControl.cs" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="Backgammon" expanded="True">
+            <Node name="Assets" expanded="True">
+              <Node name="MoveControl.cs" selected="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="Unity.Editor" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="e5b0be45-cd5d-4ea1-a2e0-d2adecda5bdb" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/Users/connorhallman/Desktop/Backgammon/Assets/BaseControl.cs" relfile="Assets/BaseControl.cs" line="113" column="1" />
+      <Breakpoint file="/Users/connorhallman/Desktop/Backgammon/Assets/MoveControl.cs" relfile="Assets/MoveControl.cs" line="131" column="1" />
+      <Breakpoint file="/Users/connorhallman/Desktop/Backgammon/Assets/MoveControl.cs" relfile="Assets/MoveControl.cs" line="241" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MultiItemStartupConfigurations />
 </Properties>
