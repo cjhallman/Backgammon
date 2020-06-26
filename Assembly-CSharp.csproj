@@ -68,6 +68,7 @@
     <Compile Include="Assets\DiceControl.cs" />
     <Compile Include="Assets\JailControl.cs" />
     <Compile Include="Assets\MoveControl.cs" />
+    <Compile Include="Assets\PieceContainer.cs" />
     <Compile Include="Assets\SpotControl.cs" />
     <Compile Include="Assets\StartSetup.cs" />
     <Reference Include="Unity.TextMeshPro.Editor">
