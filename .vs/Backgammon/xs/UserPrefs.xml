@@ -1,20 +1,20 @@
 ﻿<Properties StartupConfiguration="{C18058CC-1200-F19A-9E29-1B4B728CB551}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/CameraControl.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/MoveControl.cs">
     <Files>
-      <File FileName="Assets/StartSetup.cs" Line="41" Column="81" />
-      <File FileName="Assets/MoveControl.cs" Line="348" Column="1" />
-      <File FileName="Assets/SpotControl.cs" Line="52" Column="1" />
-      <File FileName="Assets/JailControl.cs" Line="36" Column="24" />
-      <File FileName="Assets/BaseControl.cs" Line="103" Column="35" />
-      <File FileName="Assets/Interfaces.cs" Line="28" Column="6" />
-      <File FileName="Assets/CameraControl.cs" Line="1" Column="1" />
+      <File FileName="Assets/StartSetup.cs" Line="69" Column="33" />
+      <File FileName="Assets/MoveControl.cs" Line="225" Column="1" />
+      <File FileName="Assets/SpotControl.cs" />
+      <File FileName="Assets/JailControl.cs" />
+      <File FileName="Assets/BaseControl.cs" />
+      <File FileName="Assets/CameraControl.cs" />
+      <File FileName="Assets/DiceControl.cs" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="Backgammon" expanded="True">
             <Node name="Assets" expanded="True">
-              <Node name="CameraControl.cs" selected="True" />
+              <Node name="MoveControl.cs" selected="True" />
             </Node>
           </Node>
         </State>
@@ -23,12 +23,13 @@
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="2822912f-9f77-4249-8224-019ae618978f" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="caed60d7-bc35-45b4-9887-1f1884d7603d" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="/Users/connorhallman/Desktop/Backgammon/Assets/BaseControl.cs" relfile="Assets/BaseControl.cs" line="96" column="1" />
-      <Breakpoint file="/Users/connorhallman/Desktop/Backgammon/Assets/MoveControl.cs" relfile="Assets/MoveControl.cs" line="161" column="1" />
       <Breakpoint file="/Users/connorhallman/Desktop/Backgammon/Assets/BaseControl.cs" relfile="Assets/BaseControl.cs" line="36" column="1" />
+      <Breakpoint file="/Users/connorhallman/Desktop/Backgammon/Assets/BaseControl.cs" relfile="Assets/BaseControl.cs" line="78" column="1" />
+      <Breakpoint file="/Users/connorhallman/Desktop/Backgammon/Assets/MoveControl.cs" relfile="Assets/MoveControl.cs" line="225" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MultiItemStartupConfigurations />

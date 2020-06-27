@@ -12,12 +12,12 @@ public class MoveControl : MonoBehaviour
     public float y;
     private float LocationX, LocationY, LocationZ;
     private short piece, spot = 0;
-    private int roll1, roll2 = 0;
+    public int roll1, roll2 = 0;
     private Transform OldParent;
     private PieceContainer OldSpot;
     private PieceContainer CurrentSpot;
-    public bool MyTurn, DiceRolled, Doubles, InitialSet, PieceSelected, PlayerRolledDice, TurnOver, Winner = false;
-    private bool ListsSet, DiceViewed = false;
+    public bool MyTurn, DiceRolled, Doubles, PlayerRolledDice, TurnOver, Winner = false;
+    private bool ListsSet, InitialSet, PieceSelected, DiceViewed = false;
     public bool IsBlack;
     private JailControl Jail;
     private BaseControl Base;
@@ -135,44 +135,35 @@ public class MoveControl : MonoBehaviour
         OldSpot.GetComponent<SpotControl>().Changed = true;
         InitialSet = false;
     }
+
     void SetRollsUsed(int spotsmoved)
     {
         if (!Doubles)
         {
-            //If the number of spots moved =  one of the rolls -> That's the one used
-            if (spotsmoved == roll1 && !RollsUsed[0]) {
-                SetUsedRoll(0);
-            }   
+            //If the number of spots moved = one of the rolls -> That's the one used
+            if (spotsmoved == roll1 && !RollsUsed[0])
+                SetUsedRoll(0); 
             else if (spotsmoved == roll2 && !RollsUsed[1])
-            {
-                SetUsedRoll(1);
-            }   
+                SetUsedRoll(1);  
             else
             {
                 //Spots moved is less than the rolls. Pick which ever one hasn't been used yet or the smallest.
                 if (RollsUsed[0] && !RollsUsed[1])
-                {
                     SetUsedRoll(1);
-                }
                 else if (!RollsUsed[0] && RollsUsed[1])
-                {
                     SetUsedRoll(0);
-                }
                 else if (!RollsUsed[0] && !RollsUsed[1])
                 {
                     if (roll1 < roll2)
-                    {
                         SetUsedRoll(0);
-                    } 
                     else
-                    {
-                        SetUsedRoll(1);
-                    }    
+                        SetUsedRoll(1);    
                 }
             }    
         }
         else
         {
+            //If duobles just set next one that hasn't been used
             int x = 0;
             while(RollsUsed[x])
                 x++;
@@ -189,6 +180,7 @@ public class MoveControl : MonoBehaviour
 
     void SetInitialLocation()
     {
+        //Resets the location of mover after recalcing available spots
         spot = 0;
         CurrentSpot = AvailableSpots[spot];
         AvailablePieces = new List<GameObject>(CurrentSpot.Pieces);
@@ -202,11 +194,14 @@ public class MoveControl : MonoBehaviour
 
     void SelectNext(string direction)
     {
-        switch (direction)
+        //If choosing piece to move
+        if (!PieceSelected)
         {
-            case "Up":
-                if (!PieceSelected)
-                {
+            /*If there is a piece available in the direction chosen pick that one,
+             *else move to next spot also in that direction and pick the first piece based on direction*/
+            switch (direction)
+            {
+                case "Up":
                     if (piece < AvailablePieces.Count - 1)
                         piece++;
                     else
@@ -215,23 +210,11 @@ public class MoveControl : MonoBehaviour
                             spot++;
                         else
                             spot = 0;
-                        CurrentSpot = AvailableSpots[spot];
                         AvailablePieces = new List<GameObject>(CurrentSpot.Pieces);
                         piece = 0;
-                    }   
-                }
-                else
-                {
-                    if (spot < AvailableMoves.Count - 1)
-                        spot++;
-                    else
-                        spot = 0;
-                    CurrentSpot = AvailableMoves[spot];
-                }
-                break;
-            case "Down":
-                if (!PieceSelected)
-                {
+                    }
+                    break;
+                case "Down":
                     if (piece > 0)
                         piece--;
                     else
@@ -240,30 +223,37 @@ public class MoveControl : MonoBehaviour
                             spot--;
                         else
                             spot = (short)(AvailableSpots.Count - 1);
-                        CurrentSpot = AvailableSpots[spot];
                         AvailablePieces = new List<GameObject>(CurrentSpot.Pieces);
                         piece = (short)(AvailablePieces.Count - 1);
                     }
-                }
-                else
-                {
-                    if (spot > 0)
-                        spot--;
-                    else
-                        spot = (short)(AvailableMoves.Count - 1);
-                    CurrentSpot = AvailableMoves[spot];
-                }
-                break;
-
-        }
-        if (!PieceSelected)
-        {
+                    break;
+            }
+            CurrentSpot = AvailableSpots[spot];
             LocationX = AvailablePieces[piece].transform.position.x;
             LocationY = AvailablePieces[piece].transform.position.y + y;
             LocationZ = AvailablePieces[piece].transform.position.z;
         }
+        //choosing a spot to move piece to
         else
         {
+            /*If there is a spot in the direction chosen move there
+             * else loop to around list to first/last spot*/
+            switch (direction)
+            {
+                case "Up":
+                    if (spot < AvailableMoves.Count - 1)
+                        spot++;
+                    else
+                        spot = 0;
+                    break;
+                case "Down":
+                    if (spot > 0)
+                        spot--;
+                    else
+                        spot = (short)(AvailableMoves.Count - 1);
+                    break;
+            }
+            CurrentSpot = AvailableMoves[spot];
             LocationX = AvailableMoves[spot].transform.position.x;
             LocationY = AvailableMoves[spot].transform.position.y + y;
             LocationZ = AvailableMoves[spot].transform.position.z;
@@ -271,28 +261,24 @@ public class MoveControl : MonoBehaviour
     }
 
     IEnumerator RollDice() {
-
+        //This will run on every update in the 1 second(s) it takes to set RiceRolled = true 
         DiceViewed = false;
+
+        //Pick a random number between 1->6 for each dice
         roll1 = Random.Range(1, 6);
         roll2 = Random.Range(1, 6);
-        Doubles = (roll1 == roll2);
-        GameObject.Find("DiceRoll1").GetComponent<DiceControl>().SetSprite(roll1);
-        GameObject.Find("DiceRoll2").GetComponent<DiceControl>().SetSprite(roll2);
-        if (Doubles)
-        {
-            GameObject.Find("DiceRoll3").GetComponent<DiceControl>().SetSprite(roll1);
-            GameObject.Find("DiceRoll4").GetComponent<DiceControl>().SetSprite(roll1);
-        }
-        else
-        {
-            GameObject.Find("DiceRoll3").GetComponent<DiceControl>().SetSprite(0);
-            GameObject.Find("DiceRoll4").GetComponent<DiceControl>().SetSprite(0);
-        }
 
-        //Set values for rolls used
+        //Set doubles bool
+        Doubles = (roll1 == roll2);
+
+        //Have gamemaster control displaying the role
+        GameMaster.DisplayDice();
+
+        //Refresh RollsUsed variables
         RollsUsed[0] = RollsUsed[1] = false;
         RollsUsed[2] = RollsUsed[3] = !Doubles;
-        GameMaster.SetMessage("");
+
+        //Wait a little to simulate real dice roll
         yield return new WaitForSecondsRealtime(1f);
         DiceRolled = true;
         yield return new WaitForSecondsRealtime(.5f);
@@ -301,10 +287,12 @@ public class MoveControl : MonoBehaviour
 
     IEnumerator SelectPiece()
     {
+        //Set possible moves for piece selected
         if (PickingFromJail())
         {
+            OldSpot = Jail;
             AvailableMoves = Jail.ActualPossibleMoves;
-        }
+        } 
         else
         {
             OldSpot = CurrentSpot;

@@ -15,6 +15,7 @@ public class StartSetup : MonoBehaviour
     public JailControl BlackJailControl;
     public BaseControl BlackBaseControl;
     public Text UIText;
+    private DiceControl Die1, Die2, Die3, Die4;
 
     // Start is called before the first frame update
     void Start()
@@ -22,6 +23,7 @@ public class StartSetup : MonoBehaviour
         GetAllSpots();
         SetBaseSpots();
         SetJailSpots();
+        FindDice();
     }
 
     // Update is called once per frame
@@ -39,14 +41,37 @@ public class StartSetup : MonoBehaviour
             SetMessage((CurrentMover.IsBlack ? "Black: " : "White: ") + "Press space bar to roll dice");
             BlankDiceRollDisplays();
         }
+        else
+        {
+            SetMessage("");
+        }
+    }
+
+    void FindDice()
+    {
+        Die1 = GameObject.Find("DiceRoll1").GetComponent<DiceControl>();
+        Die2 = GameObject.Find("DiceRoll2").GetComponent<DiceControl>();
+        Die3 = GameObject.Find("DiceRoll3").GetComponent<DiceControl>();
+        Die4 = GameObject.Find("DiceRoll4").GetComponent<DiceControl>();
+    }
+
+    public void DisplayDice()
+    { 
+        Die1.SetSprite(CurrentMover.roll1);
+        Die2.SetSprite(CurrentMover.roll2);
+        int ExtraDice = 0;
+        if (CurrentMover.Doubles)
+            ExtraDice = CurrentMover.roll1;
+        Die3.SetSprite(ExtraDice);
+        Die4.SetSprite(ExtraDice);
     }
 
     void BlankDiceRollDisplays()
     {
-        GameObject.Find("DiceRoll1").GetComponent<DiceControl>().SetSprite(0);
-        GameObject.Find("DiceRoll2").GetComponent<DiceControl>().SetSprite(0);
-        GameObject.Find("DiceRoll3").GetComponent<DiceControl>().SetSprite(0);
-        GameObject.Find("DiceRoll4").GetComponent<DiceControl>().SetSprite(0);
+        Die1.GetComponent<DiceControl>().SetSprite(0);
+        Die2.GetComponent<DiceControl>().SetSprite(0);
+        Die3.GetComponent<DiceControl>().SetSprite(0);
+        Die4.GetComponent<DiceControl>().SetSprite(0);
     }
 
     void GetAllSpots()
