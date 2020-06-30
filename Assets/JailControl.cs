@@ -9,6 +9,10 @@ public class JailControl : PieceContainer
     // Start is called before the first frame update
     void Start()
     {
+        if (this.gameObject.name.StartsWith("Black"))
+            Position = 24;
+        else
+            Position = -1;
     }
 
     // Update is called once per frame

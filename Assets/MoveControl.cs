@@ -163,7 +163,7 @@ public class MoveControl : MonoBehaviour
         }
         else
         {
-            //If duobles just set next one that hasn't been used
+            //If doubles just set next one that hasn't been used
             int x = 0;
             while(RollsUsed[x])
                 x++;
@@ -210,7 +210,6 @@ public class MoveControl : MonoBehaviour
                             spot++;
                         else
                             spot = 0;
-                        AvailablePieces = new List<GameObject>(CurrentSpot.Pieces);
                         piece = 0;
                     }
                     break;
@@ -223,12 +222,13 @@ public class MoveControl : MonoBehaviour
                             spot--;
                         else
                             spot = (short)(AvailableSpots.Count - 1);
-                        AvailablePieces = new List<GameObject>(CurrentSpot.Pieces);
-                        piece = (short)(AvailablePieces.Count - 1);
+                        piece = -1;
                     }
                     break;
             }
             CurrentSpot = AvailableSpots[spot];
+            AvailablePieces = new List<GameObject>(CurrentSpot.Pieces);
+            if (piece < 0) piece = (short)(AvailablePieces.Count - 1);
             LocationX = AvailablePieces[piece].transform.position.x;
             LocationY = AvailablePieces[piece].transform.position.y + y;
             LocationZ = AvailablePieces[piece].transform.position.z;
@@ -288,22 +288,17 @@ public class MoveControl : MonoBehaviour
     IEnumerator SelectPiece()
     {
         //Set possible moves for piece selected
-        if (PickingFromJail())
-        {
-            OldSpot = Jail;
-            AvailableMoves = Jail.ActualPossibleMoves;
-        } 
-        else
-        {
-            OldSpot = CurrentSpot;
-            AvailableMoves = OldSpot.ActualPossibleMoves;
-            if (Base.BearingOff() && Base.ActualPossibleMoves.Contains(OldSpot))
-                AvailableMoves.Add(Base);
-        }
+        OldSpot = CurrentSpot;
+        AvailableMoves = OldSpot.ActualPossibleMoves;
+        if (Base.BearingOff() && Base.ActualPossibleMoves.Contains(OldSpot))
+            AvailableMoves.Add(Base);
+        //Save old parent of piece and set new parent to mover so piece moves with it
         OldParent = AvailablePieces[piece].transform.parent;
         AvailablePieces[piece].transform.parent = transform;
+        //Set mover color to yellow to indicate piece selected 
         GetComponentInChildren<Renderer>().material.color = Color.yellow;
         PieceSelected = true;
+        //Move mover to first available spot
         yield return new WaitForSecondsRealtime(.1f);
         SelectNext("Up");
         yield return new WaitForSecondsRealtime(.1f);
@@ -312,33 +307,17 @@ public class MoveControl : MonoBehaviour
 
     IEnumerator SelectSpot()
     {
-        int spotsmoved;
-        if (PickingFromJail())
-        {
-            if (IsBlack)
-                spotsmoved = 24 - CurrentSpot.Position;
-            else
-                spotsmoved = 1 + CurrentSpot.Position;
-            Jail.RemovePiece(AvailablePieces[piece]);
-            CurrentSpot.AddPiece(AvailablePieces[piece]);
-        }
-        else
-        {
-            OldSpot.RemovePiece(AvailablePieces[piece]);
-            if (CurrentSpot != null)
-            {
-                spotsmoved = Mathf.Abs(CurrentSpot.Position - OldSpot.Position);
-                CurrentSpot.AddPiece(AvailablePieces[piece]);
-            }
-            else
-            {
-                spotsmoved = Mathf.Abs(Base.Position - OldSpot.Position);
-                Base.AddPiece(AvailablePieces[piece]);
-            }
-        }
+        //Calc Spots Moved (use abs because direction for white/black are opposite)
+        int spotsmoved = Mathf.Abs(CurrentSpot.Position - OldSpot.Position);
+        //Remove piece from old spot and add to new
+        OldSpot.RemovePiece(AvailablePieces[piece]);
+        CurrentSpot.AddPiece(AvailablePieces[piece]);
+        //Drop piece from mover
         AvailablePieces[piece].transform.parent = OldParent;
+        //Set mover color to red to indicate piece not selected
         GetComponentInChildren<Renderer>().material.color = Color.red;
         PieceSelected = false;
+        //Update Rolls used based on spots moved
         SetRollsUsed(spotsmoved);
         yield return new WaitForSecondsRealtime(.1f);
         ListenForSpace = true;
@@ -348,34 +327,32 @@ public class MoveControl : MonoBehaviour
     {
         //Check if win
         if(Base.Pieces.Count == 15)
-        {
             Winner = true;
-        }
         else
         {
+            //Clear old lists
             AvailableSpots.Clear();
             AvailablePieces.Clear();
+            //If picking from jail there is no need to check all other spots
             if (PickingFromJail())
             {
                 Jail.GetPossibleMoves(IsBlack, roll1, roll2);
                 if (Jail.ActualPossibleMoves.Count > 0)
-                {
                     AvailableSpots.Add(Jail);
-                }
             }
             else
             {
+                //Check each spot for possible moves
                 foreach (PieceContainer s in GameMaster.AllSpots)
                 {
                     s.GetPossibleMoves(IsBlack, roll1, roll2);
                     if (s.ActualPossibleMoves.Count > 0)
                     {
                         if (!AvailableSpots.Contains(s) && s.Pieces.Count > 0)
-                        {
                             AvailableSpots.Add(s);
-                        }
                     }
                 }
+                //If bearing off check the base for any possible moves
                 if (Base.BearingOff())
                 {
                     Base.GetPossibleMoves(IsBlack, roll1, roll2);
@@ -389,12 +366,12 @@ public class MoveControl : MonoBehaviour
                     }
                 }
             }
+            //If there are no available spots left -> turn is over
             if (AvailableSpots.Count == 0)
-            {
                 TurnOver = true;
-            }
             else
             {
+                //Indicate that lists are set and the mover can move to initial spot
                 ListsSet = true;
                 InitialSet = false;
             }
