@@ -63,14 +63,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\BaseControl.cs" />
-    <Compile Include="Assets\CameraControl.cs" />
-    <Compile Include="Assets\DiceControl.cs" />
-    <Compile Include="Assets\JailControl.cs" />
-    <Compile Include="Assets\MoveControl.cs" />
-    <Compile Include="Assets\PieceContainer.cs" />
-    <Compile Include="Assets\SpotControl.cs" />
-    <Compile Include="Assets\StartSetup.cs" />
+    <Compile Include="Assets\Scripts\BaseControl.cs" />
+    <Compile Include="Assets\Scripts\CameraControl.cs" />
+    <Compile Include="Assets\Scripts\DiceControl.cs" />
+    <Compile Include="Assets\Scripts\GameControl.cs" />
+    <Compile Include="Assets\Scripts\HumanPlayer.cs" />
+    <Compile Include="Assets\Scripts\JailControl.cs" />
+    <Compile Include="Assets\Scripts\MoveControl.cs" />
+    <Compile Include="Assets\Scripts\PieceContainer.cs" />
+    <Compile Include="Assets\Scripts\Player.cs" />
+    <Compile Include="Assets\Scripts\PlayerFactory.cs" />
+    <Compile Include="Assets\Scripts\PlayerSelectionControl.cs" />
+    <Compile Include="Assets\Scripts\RandomCPUPlayer.cs" />
+    <Compile Include="Assets\Scripts\SimpleCPUPlayer.cs" />
+    <Compile Include="Assets\Scripts\SpotControl.cs" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>/Users/connorhallman/Desktop/Backgammon/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>

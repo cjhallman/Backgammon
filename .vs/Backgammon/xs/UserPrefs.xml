@@ -1,20 +1,24 @@
 ﻿<Properties StartupConfiguration="{C18058CC-1200-F19A-9E29-1B4B728CB551}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/MoveControl.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/SimpleCPUPlayer.cs">
     <Files>
-      <File FileName="Assets/StartSetup.cs" Line="69" Column="33" />
-      <File FileName="Assets/MoveControl.cs" Line="225" Column="1" />
-      <File FileName="Assets/SpotControl.cs" />
-      <File FileName="Assets/JailControl.cs" />
-      <File FileName="Assets/BaseControl.cs" />
-      <File FileName="Assets/CameraControl.cs" />
-      <File FileName="Assets/DiceControl.cs" />
+      <File FileName="Assets/Scripts/MoveControl.cs" Line="107" Column="1" />
+      <File FileName="Assets/Scripts/GameControl.cs" Line="30" Column="29" />
+      <File FileName="Assets/Scripts/PlayerSelector.cs" Line="48" Column="38" />
+      <File FileName="Assets/Scripts/Player.cs" Line="10" Column="44" />
+      <File FileName="Assets/Scripts/HumanPlayer.cs" Line="26" Column="13" />
+      <File FileName="Assets/Scripts/RandomCPUPlayer.cs" Line="5" Column="30" />
+      <File FileName="Assets/Scripts/SimpleCPUPlayer.cs" Line="10" Column="1" />
+      <File FileName="Assets/Scripts/PlayerFactory.cs" Line="16" Column="46" />
+      <File FileName="Assets/Scripts/BaseControl.cs" Line="21" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="Backgammon" expanded="True">
             <Node name="Assets" expanded="True">
-              <Node name="MoveControl.cs" selected="True" />
+              <Node name="Scripts" expanded="True">
+                <Node name="SimpleCPUPlayer.cs" selected="True" />
+              </Node>
             </Node>
           </Node>
         </State>
@@ -23,13 +27,12 @@
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="5828e7ca-4b57-4cde-a7d6-f596fc125375" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="3e6447a2-1fe4-4304-ab09-6b87b810bf70" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
-      <Breakpoint file="/Users/connorhallman/Desktop/Backgammon/Assets/BaseControl.cs" relfile="Assets/BaseControl.cs" line="96" column="1" />
-      <Breakpoint file="/Users/connorhallman/Desktop/Backgammon/Assets/BaseControl.cs" relfile="Assets/BaseControl.cs" line="36" column="1" />
-      <Breakpoint file="/Users/connorhallman/Desktop/Backgammon/Assets/BaseControl.cs" relfile="Assets/BaseControl.cs" line="78" column="1" />
-      <Breakpoint file="/Users/connorhallman/Desktop/Backgammon/Assets/MoveControl.cs" relfile="Assets/MoveControl.cs" line="225" column="1" />
+      <Breakpoint file="/Users/connorhallman/Desktop/Backgammon/Assets/PlayerSelector.cs" relfile="Assets/PlayerSelector.cs" line="25" column="1" />
+      <Breakpoint file="/Users/connorhallman/Desktop/Backgammon/Assets/Scripts/BaseControl.cs" relfile="Assets/Scripts/BaseControl.cs" line="96" column="1" />
+      <Breakpoint file="/Users/connorhallman/Desktop/Backgammon/Assets/Scripts/SimpleCPUPlayer.cs" relfile="Assets/Scripts/SimpleCPUPlayer.cs" line="9" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MultiItemStartupConfigurations />
