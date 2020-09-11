@@ -35,7 +35,7 @@ public abstract class Player
         PieceSelected = false;
     }
 
-    public virtual IEnumerator SelectedPiece()
+    public IEnumerator SelectedPiece()
     {
         PieceSelected = true;
         //Move mover to first available spot
@@ -44,7 +44,7 @@ public abstract class Player
         ListenForPick = true;
     }
 
-    public virtual IEnumerator SelectedSpot()
+    public IEnumerator SelectedSpot()
     {
         PieceSelected = false;
         yield return new WaitForSecondsRealtime(SecondsToWait);
@@ -55,9 +55,9 @@ public abstract class Player
     {
         //If choosing piece to move
         if (!PieceSelected)
-            MoveCont.SelectNextPiece(direction);
+            MoveCont.SelectNextSpot(direction);
         //choosing a spot to move piece to
         else
-            MoveCont.SelectNextSpot(direction);
+            MoveCont.SelectNextMove(direction);
     }
 }

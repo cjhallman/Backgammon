@@ -12,7 +12,7 @@ public class RandomCPUPlayer : Player
         if (ListenForPick)
         {
             ListenForPick = false;
-            rand = Random.Range(0, MoveCont.GetNumAvailable(PieceSelected) - 1);
+            rand = Random.Range(0, MoveCont.GetNumAvailable(PieceSelected));
         }else if (rand > 0)
         {
             SelectNext("Up");
@@ -22,7 +22,7 @@ public class RandomCPUPlayer : Player
             if (!PieceSelected)
                 MoveCont.SelectPiece();
             else
-                MoveCont.SelectSpot();
+                MoveCont.SelectMove();
             rand = -1;
         }
     }

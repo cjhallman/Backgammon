@@ -24,7 +24,7 @@ public class SpotControl : PieceContainer
         {
             BetweenPieces = BetweenPieces * -1;
         }
-        SetControlledVariables();
+        SetControlledVariables();     
     }
 
     // Update is called once per frame
@@ -34,14 +34,9 @@ public class SpotControl : PieceContainer
             SetControlledVariables();
             for (int x=0; x<Pieces.Count; x++){
                 if (x < 5)
-                {
                     Pieces[x].transform.position = new Vector3(InitialPiece + (BetweenPieces * x), y, transform.position.z);
-                }
                 else
-                {
                     Pieces[x].transform.position = new Vector3(InitialPiece + (BetweenPieces * (x%5)), y + (StackPieces * (x/5)), transform.position.z);
-                }
-
             }
             Changed = false;
         }

@@ -28,7 +28,7 @@ public class HumanPlayer : Player
             if (!PieceSelected)
                 MoveCont.SelectPiece();
             else
-                MoveCont.SelectSpot();
+                MoveCont.SelectMove();
         }
     }
 

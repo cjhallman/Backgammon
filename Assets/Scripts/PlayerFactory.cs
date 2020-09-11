@@ -14,6 +14,8 @@ public static class PlayerFactory
                 return new RandomCPUPlayer();
             case "Simple CPU":
                 return new SimpleCPUPlayer();
+            case "Aggressive CPU":
+                return new AggressiveCPUPlayer();
             default:
                 return null;
         }

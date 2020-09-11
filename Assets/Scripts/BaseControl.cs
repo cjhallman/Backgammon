@@ -25,8 +25,7 @@ public class BaseControl : PieceContainer
                 Pieces[x].transform.position = new Vector3(InitialPiece + (BetweenPieces * x), y, transform.position.z);
                 if(Pieces[x].transform.rotation.eulerAngles.z==0)
                     Pieces[x].transform.Rotate(new Vector3(0, 0, 1), 90f);
-            }
-                
+            }   
             Changed = false;
         }
     }

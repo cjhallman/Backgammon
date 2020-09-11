@@ -6,12 +6,12 @@ using UnityEngine.UI;
 public class MoveControl : MonoBehaviour
 {
     public GameControl GameMaster;
-    private List<GameObject> AvailablePieces = new List<GameObject>();
+    private GameObject CurrentPiece;
     private List<PieceContainer> AvailableSpots = new List<PieceContainer>();
     private List<PieceContainer> AvailableMoves = new List<PieceContainer>();
     public float y;
     private float LocationX, LocationY, LocationZ;
-    private short piece, spot = 0;
+    private short spot = 0;
     public int roll1, roll2 = 0;
     private Transform OldParent;
     private PieceContainer OldSpot;
@@ -62,9 +62,7 @@ public class MoveControl : MonoBehaviour
                 GameMaster.CurrentMover = this;
 
                 if (TurnOver)
-                {
                     Plyr.TurnOver();
-                }
                 else
                 {
                     //Roll dice if they haven't been yet
@@ -103,51 +101,39 @@ public class MoveControl : MonoBehaviour
     public void CancelSelection()
     {
         MeshRend.material.color = Color.red;
-        AvailablePieces[piece].transform.parent = OldParent;
+        CurrentPiece.transform.parent = OldParent;
         OldSpot.GetComponent<SpotControl>().Changed = true;
         InitialSet = false;
     }
 
-    public void SelectNextPiece(string direction)
+    public void SelectNextSpot(string direction)
     {
         /*If there is a piece available in the direction chosen pick that one,
         *else move to next spot also in that direction and pick the first piece based on direction*/
         switch (direction)
         {
             case "Up":
-                if (piece < AvailablePieces.Count - 1)
-                    piece++;
+                if (spot < AvailableSpots.Count - 1)
+                    spot++;
                 else
-                {
-                    if (spot < AvailableSpots.Count - 1)
-                        spot++;
-                    else
-                        spot = 0;
-                    piece = 0;
-                }
+                    spot = 0;
                 break;
             case "Down":
-                if (piece > 0)
-                    piece--;
+                if (spot > 0)
+                    spot--;
                 else
-                {
-                    if (spot > 0)
-                        spot--;
-                    else
-                        spot = (short)(AvailableSpots.Count - 1);
-                    piece = -1;
-                }
+                    spot = (short)(AvailableSpots.Count - 1);
                 break;
         }
         CurrentSpot = AvailableSpots[spot];
-        AvailablePieces = new List<GameObject>(CurrentSpot.Pieces);
-        if (piece < 0) piece = (short)(AvailablePieces.Count - 1);
-        LocationX = AvailablePieces[piece].transform.position.x;
-        LocationY = AvailablePieces[piece].transform.position.y + y;
-        LocationZ = AvailablePieces[piece].transform.position.z;
+        CurrentPiece = CurrentSpot.Pieces[0];
+        LocationX = CurrentPiece.transform.position.x;
+        LocationY = CurrentPiece.transform.position.y + y;
+        LocationZ = CurrentPiece.transform.position.z;
+        SetAvailableMoves();
     }
 
-    public void SelectNextSpot(string direction)
+    public void SelectNextMove(string direction)
     {
         /*If there is a spot in the direction chosen move there
              * else loop to around list to first/last spot*/
@@ -176,32 +162,30 @@ public class MoveControl : MonoBehaviour
     {
         //Set possible moves for piece selected
         OldSpot = CurrentSpot;
-        AvailableMoves = OldSpot.ActualPossibleMoves;
-        if (Base.BearingOff() && Base.ActualPossibleMoves.Contains(OldSpot))
-            AvailableMoves.Add(Base);
         //Save old parent of piece and set new parent to mover so piece moves with it
-        OldParent = AvailablePieces[piece].transform.parent;
-        AvailablePieces[piece].transform.parent = transform;
+        OldParent = CurrentPiece.transform.parent;
+        CurrentPiece.transform.parent = transform;
         //Set mover color to yellow to indicate piece selected 
         GetComponentInChildren<Renderer>().material.color = Color.yellow;
         StartCoroutine(Plyr.SelectedPiece());
     }
 
-    public void SelectSpot()
+    public void SelectMove()
     {
+        foreach (PieceContainer pc in AvailableMoves)
+            pc.Outline(false);
         //Calc Spots Moved (use abs because direction for white/black are opposite)
         int spotsmoved = Mathf.Abs(CurrentSpot.Position - OldSpot.Position);
         //Remove piece from old spot and add to new
-        OldSpot.RemovePiece(AvailablePieces[piece]);
-        CurrentSpot.AddPiece(AvailablePieces[piece]);
+        OldSpot.RemovePiece(CurrentPiece);
+        CurrentSpot.AddPiece(CurrentPiece);
         //Drop piece from mover
-        AvailablePieces[piece].transform.parent = OldParent;
+        CurrentPiece.transform.parent = OldParent;
         //Set mover color to red to indicate piece not selected
         GetComponentInChildren<Renderer>().material.color = Color.red;
         StartCoroutine(Plyr.SelectedSpot());
         //Update Rolls used based on spots moved
         SetRollsUsed(spotsmoved);
-        
     }
 
     public void SetPlayer(string PlayerType)
@@ -262,11 +246,11 @@ public class MoveControl : MonoBehaviour
         //Resets the location of mover after recalcing available spots
         spot = 0;
         CurrentSpot = AvailableSpots[spot];
-        AvailablePieces = new List<GameObject>(CurrentSpot.Pieces);
-        piece = 0;
-        LocationX = AvailablePieces[piece].transform.position.x;
-        LocationY = AvailablePieces[piece].transform.position.y + y;
-        LocationZ = AvailablePieces[piece].transform.position.z;
+        CurrentPiece = CurrentSpot.Pieces[0];
+        LocationX = CurrentPiece.transform.position.x;
+        LocationY = CurrentPiece.transform.position.y + y;
+        LocationZ = CurrentPiece.transform.position.z;
+        SetAvailableMoves();
         MeshRend.enabled = true;
         InitialSet = true;
     }
@@ -305,7 +289,7 @@ public class MoveControl : MonoBehaviour
         {
             //Clear old lists
             AvailableSpots.Clear();
-            AvailablePieces.Clear();
+            CurrentPiece = null;
             //If picking from jail there is no need to check all other spots
             if (PickingFromJail())
             {
@@ -351,16 +335,23 @@ public class MoveControl : MonoBehaviour
         }        
     }
 
+    private void SetAvailableMoves()
+    {
+        foreach (PieceContainer pc in AvailableMoves)
+            pc.Outline(false);
+        AvailableMoves = CurrentSpot.ActualPossibleMoves;
+        if (Base.BearingOff() && Base.ActualPossibleMoves.Contains(CurrentSpot))
+            AvailableMoves.Add(Base);
+        foreach (PieceContainer pc in AvailableMoves)
+            pc.Outline(true);
+    }
+
     public int GetNumAvailable(bool PieceSelected)
     {
-        int num = 0;
         if (!PieceSelected)
-        {
-            foreach (PieceContainer s in AvailableSpots)
-                num += s.Pieces.Count;
-        }
+            return AvailableSpots.Count;
         else
-            num = AvailableSpots.Count;
-        return num;
+            return AvailableMoves.Count;
     }
+
 }

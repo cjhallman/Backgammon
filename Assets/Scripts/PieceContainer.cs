@@ -29,6 +29,10 @@ public abstract class PieceContainer: MonoBehaviour
         Pieces.Remove(piece);
         Changed = true;
     }
+    public void Outline(bool on)
+    {
+        gameObject.transform.Find("Outline").gameObject.SetActive(on);
+    }
 
     public abstract void GetPossibleMoves(bool black, int roll1, int roll2);
     public abstract void CalcPossibleMoves();

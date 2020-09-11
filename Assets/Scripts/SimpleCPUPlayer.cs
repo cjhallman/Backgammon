@@ -13,7 +13,7 @@ public class SimpleCPUPlayer : Player
             if (!PieceSelected)
                 MoveCont.SelectPiece();
             else
-                MoveCont.SelectSpot();
+                MoveCont.SelectMove();
         }
     }
 }

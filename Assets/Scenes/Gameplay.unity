@@ -1894,8 +1894,9 @@ MonoBehaviour:
   PlayerTypeText: {fileID: 2076623105}
   PlayerTypes:
   - Human
-  - Random CPU
   - Simple CPU
+  - Random CPU
+  - Aggressive CPU
 --- !u!1 &617356251 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7392006206858094547, guid: d5772a950aeda4536b8cbd5778e2c9f5,
