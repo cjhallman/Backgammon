@@ -7,13 +7,13 @@ public class SimpleCPUPlayer : Player
     public override void PickPieceOrSpot()
     {
         //Select first piece or spot
-        if (ListenForPick)
+        if (listenForPick)
         {
-            ListenForPick = false;
-            if (!PieceSelected)
-                MoveCont.SelectPiece();
+            listenForPick = false;
+            if (!pieceSelected)
+                moveCont.SelectPiece();
             else
-                MoveCont.SelectMove();
+                moveCont.SelectMove();
         }
     }
 }

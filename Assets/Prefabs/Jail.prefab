@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5424132958657619573}
-  - component: {fileID: 5424132958657619572}
+  - component: {fileID: 8423098026915908551}
   m_Layer: 0
   m_Name: Jail
   m_TagString: Untagged
@@ -31,21 +31,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5424132958657619572
+--- !u!114 &8423098026915908551
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5424132958657619571}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23a2252d9ce0a4f1fa3aeb96c38abe95, type: 3}
+  m_Script: {fileID: 11500000, guid: f9f1b053237824e0c88c75e07b16746c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Pieces: []
-  Changed: 0
-  y: 1.15
-  BetweenSpots: 1.5833333
-  BetweenPieces: 1.2
-  StackPieces: 0.2
+  gameMaster: {fileID: 0}
+  pieces: []

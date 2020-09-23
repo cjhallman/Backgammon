@@ -6,12 +6,12 @@ public class HumanPlayer : Player
 {
     public HumanPlayer()
     {
-        SecondsToWait = .1f;
+        secondsToWait = .1f;
     }
     public override void RollDice()
     {
         if (Input.GetKeyDown(KeyCode.Space))
-            MoveCont.PlayerRolledDice = true;
+            moveCont.playerRolledDice = true;
     }
 
     public override void PickPieceOrSpot()
@@ -22,13 +22,13 @@ public class HumanPlayer : Player
         if (Input.GetKeyDown(KeyCode.DownArrow))
             SelectNext("Down");
         //Select/Deselect piece or roll dice
-        if (Input.GetKeyDown(KeyCode.Space) && ListenForPick)
+        if (Input.GetKeyDown(KeyCode.Space) && listenForPick)
         {
-            ListenForPick = false;
-            if (!PieceSelected)
-                MoveCont.SelectPiece();
+            listenForPick = false;
+            if (!pieceSelected)
+                moveCont.SelectPiece();
             else
-                MoveCont.SelectMove();
+                moveCont.SelectMove();
         }
     }
 
@@ -37,14 +37,14 @@ public class HumanPlayer : Player
         //Cancel selection
         if (Input.GetKeyDown(KeyCode.X))
         {
-            if (PieceSelected)
+            if (pieceSelected)
                 CancelSelection();
         }
     }
 
     void CancelSelection()
     {
-        PieceSelected = false;
-        MoveCont.CancelSelection();
+        pieceSelected = false;
+        moveCont.CancelSelection();
     }
 }

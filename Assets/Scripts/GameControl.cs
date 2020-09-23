@@ -5,45 +5,54 @@ using UnityEngine.UI;
 
 public class GameControl : MonoBehaviour
 {
-    public GameObject[] WhitePieces;
-    public GameObject[] BlackPieces;
-    public PieceContainer[] AllSpots;
+    public GameObject[] whitePieces;
+    public GameObject[] blackPieces;
+    
     public CameraControl cam;
-    public MoveControl CurrentMover;
-    public GameObject BlackMover;
-    public GameObject WhiteMover;
-    public JailControl WhiteJailControl;
-    public BaseControl WhiteBaseControl;
-    public JailControl BlackJailControl;
-    public BaseControl BlackBaseControl;
-    public Text UIText;
-    private DiceControl Die1, Die2, Die3, Die4;
+    public MoveControl currentMover;
+    public GameObject blackMover;
+    public GameObject whiteMover;
 
-    // Start is called before the first frame update
-    void Start()
+    public Text uiText;
+    private DiceControl die1, die2, die3, die4;
+
+    public PieceContainerObject[] allSpots;
+    public PieceContainerObject whiteJailControl;
+    public PieceContainerObject whiteBaseControl;
+    public PieceContainerObject blackJailControl;
+    public PieceContainerObject blackBaseControl;
+
+    //Awake is called before Start
+    private void Awake()
     {
         GetAllSpots();
         SetBaseSpots();
         SetJailSpots();
+    }
+    // Start is called before the first frame update
+    void Start()
+    {
+        //Turn on Piece Container Objects
+        InitializeAllSpotsSpotObjects();
+        blackMover.SetActive(true);
+        whiteMover.SetActive(true);
         FindDice();
-        BlackMover.SetActive(true);
-        WhiteMover.SetActive(true);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (CurrentMover.Winner)
-            SetMessage((CurrentMover.IsBlack ? "Black " : "White ") + "wins!");
-        else if (CurrentMover.TurnOver)
+        if (currentMover.winner)
+            SetMessage((currentMover.isBlack ? "Black " : "White ") + "wins!");
+        else if (currentMover.turnOver)
         {
             //Tell them that they have no more moves to make
             SetMessage("Press space to pass control to other player");
-            CurrentMover.GetComponentInChildren<MeshRenderer>().enabled = false;
+            currentMover.GetComponentInChildren<MeshRenderer>().enabled = false;
         }
-        else if (!CurrentMover.DiceRolled && !CurrentMover.PlayerRolledDice && !cam.flipping)
+        else if (!currentMover.diceRolled && !currentMover.playerRolledDice && !cam.flipping)
         {
-            SetMessage((CurrentMover.IsBlack ? "Black: " : "White: ") + "Press space bar to roll dice");
+            SetMessage((currentMover.isBlack ? "Black: " : "White: ") + "Press space bar to roll dice");
             BlankDiceRollDisplays();
         }
         else
@@ -52,66 +61,77 @@ public class GameControl : MonoBehaviour
 
     void FindDice()
     {
-        Die1 = GameObject.Find("DiceRoll1").GetComponent<DiceControl>();
-        Die2 = GameObject.Find("DiceRoll2").GetComponent<DiceControl>();
-        Die3 = GameObject.Find("DiceRoll3").GetComponent<DiceControl>();
-        Die4 = GameObject.Find("DiceRoll4").GetComponent<DiceControl>();
+        die1 = GameObject.Find("DiceRoll1").GetComponent<DiceControl>();
+        die2 = GameObject.Find("DiceRoll2").GetComponent<DiceControl>();
+        die3 = GameObject.Find("DiceRoll3").GetComponent<DiceControl>();
+        die4 = GameObject.Find("DiceRoll4").GetComponent<DiceControl>();
     }
 
     public void DisplayDice()
     { 
-        Die1.SetSprite(CurrentMover.roll1);
-        Die2.SetSprite(CurrentMover.roll2);
-        int ExtraDice = 0;
-        if (CurrentMover.Doubles)
-            ExtraDice = CurrentMover.roll1;
-        Die3.SetSprite(ExtraDice);
-        Die4.SetSprite(ExtraDice);
+        die1.SetSprite(currentMover.roll1);
+        die2.SetSprite(currentMover.roll2);
+        int extraDice = 0;
+        if (currentMover.doubles)
+            extraDice = currentMover.roll1;
+        die3.SetSprite(extraDice);
+        die4.SetSprite(extraDice);
     }
 
     void BlankDiceRollDisplays()
     {
-        Die1.GetComponent<DiceControl>().SetSprite(0);
-        Die2.GetComponent<DiceControl>().SetSprite(0);
-        Die3.GetComponent<DiceControl>().SetSprite(0);
-        Die4.GetComponent<DiceControl>().SetSprite(0);
+        die1.GetComponent<DiceControl>().SetSprite(0);
+        die2.GetComponent<DiceControl>().SetSprite(0);
+        die3.GetComponent<DiceControl>().SetSprite(0);
+        die4.GetComponent<DiceControl>().SetSprite(0);
     }
 
     void GetAllSpots()
     {
-        AllSpots = new PieceContainer[24];
-        for(int x = 1; x <= 4; x++)
+        allSpots = new PieceContainerObject[24];
+        for (int x = 1; x <= 4; x++)
         {
             for (int z = 1; z <= 6; z++)
-                AllSpots[((x - 1) * 6 + z)-1] = GameObject.Find("Spot" + x + "." + z).GetComponent<SpotControl>();
-        }
-        foreach(SpotControl s in AllSpots)
-        {
-            s.CalcPossibleMoves();
+            {
+                PieceContainerObject pobj = GameObject.Find("Spot" + x + "." + z).GetComponent<PieceContainerObject>();
+                allSpots[((x - 1) * 6 + z) - 1] = pobj;
+                pobj.enabled = true;
+            }
+                
         }
     }
 
     void SetBaseSpots()
     {
-        WhiteBaseControl.CalcPossibleMoves();
-        BlackBaseControl.CalcPossibleMoves();
+        whiteBaseControl = GameObject.Find("BaseWhite").GetComponent<PieceContainerObject>();
+        blackBaseControl = GameObject.Find("BaseBlack").GetComponent<PieceContainerObject>();
+        whiteBaseControl.enabled = true;
+        blackBaseControl.enabled = true;
     }
 
     void SetJailSpots()
     {
-        WhiteJailControl.CalcPossibleMoves();
-        BlackJailControl.CalcPossibleMoves();
+        whiteJailControl = GameObject.Find("JailWhite").GetComponent<PieceContainerObject>();
+        blackJailControl = GameObject.Find("JailBlack").GetComponent<PieceContainerObject>();
+        whiteJailControl.enabled = true;
+        blackJailControl.enabled = true;
+    }
+
+    void InitializeAllSpotsSpotObjects()
+    {
+        foreach (PieceContainerObject pobj in allSpots)
+            pobj.InitializeAllSpotsOnControl();
     }
 
     public void SetMessage(string message)
     {
-        UIText.text = message;
+        uiText.text = message;
     }
 
     public void SwitchTurns()
     {
-        CurrentMover.MyTurn = false;
-        CurrentMover.TurnOver = false;
+        currentMover.myTurn = false;
+        currentMover.turnOver = false;
         SetMessage("");
         cam.flip();
     }

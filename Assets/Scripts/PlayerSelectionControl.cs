@@ -5,16 +5,16 @@ using UnityEngine.UI;
 
 public class PlayerSelectionControl : MonoBehaviour
 {
-    public GameControl GameMaster;
-    public Text ColorText, PlayerTypeText;
-    public string[] PlayerTypes;
-    private int TypeIndex = 0;
+    public GameControl gameMaster;
+    public Text colorText, playerTypeText;
+    public string[] playerTypes;
+    private int typeIndex = 0;
 
     // Start is called before the first frame update
     void Start()
     {
-        ColorText.text = "White";
-        PlayerTypeText.text = PlayerTypes[TypeIndex];
+        colorText.text = "White";
+        playerTypeText.text = playerTypes[typeIndex];
     }
 
     // Update is called once per frame
@@ -22,31 +22,31 @@ public class PlayerSelectionControl : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            TypeIndex++;
-            if (TypeIndex >= PlayerTypes.Length)
-                TypeIndex = 0;
-            PlayerTypeText.text = PlayerTypes[TypeIndex];
+            typeIndex++;
+            if (typeIndex >= playerTypes.Length)
+                typeIndex = 0;
+            playerTypeText.text = playerTypes[typeIndex];
         }
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            TypeIndex--;
-            if (TypeIndex < 0)
-                TypeIndex = PlayerTypes.Length - 1;
-            PlayerTypeText.text = PlayerTypes[TypeIndex];
+            typeIndex--;
+            if (typeIndex < 0)
+                typeIndex = playerTypes.Length - 1;
+            playerTypeText.text = playerTypes[typeIndex];
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if(ColorText.text == "White")
+            if(colorText.text == "White")
             {
-                GameMaster.WhiteMover.GetComponent<MoveControl>().SetPlayer(PlayerTypes[TypeIndex]);
-                ColorText.text = "Black";
-                TypeIndex = 0;
-                PlayerTypeText.text = PlayerTypes[TypeIndex];
+                gameMaster.whiteMover.GetComponent<MoveControl>().SetPlayer(playerTypes[typeIndex]);
+                colorText.text = "Black";
+                typeIndex = 0;
+                playerTypeText.text = playerTypes[typeIndex];
             }
             else
             {
-                GameMaster.BlackMover.GetComponent<MoveControl>().SetPlayer(PlayerTypes[TypeIndex]);
-                GameMaster.enabled = true;
+                gameMaster.blackMover.GetComponent<MoveControl>().SetPlayer(playerTypes[typeIndex]);
+                gameMaster.enabled = true;
                 this.gameObject.SetActive(false);
             } 
         }

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 9182466528786181806}
   - component: {fileID: 1640166415955523765}
   - component: {fileID: 3189744421729706610}
-  - component: {fileID: 9047135082679382362}
+  - component: {fileID: 5052727045083043422}
   m_Layer: 0
   m_Name: Spot
   m_TagString: Untagged
@@ -64,30 +64,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &9047135082679382362
+--- !u!114 &5052727045083043422
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9182466528786181807}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1495f87c3535a41cfbcf15505ba67b7a, type: 3}
+  m_Script: {fileID: 11500000, guid: f9f1b053237824e0c88c75e07b16746c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GameMaster: {fileID: 0}
-  Pieces: []
-  ActualPossibleMoves: []
-  Changed: 0
-  BetweenPieces: 0
-  StackPieces: 0
-  y: 0.15
-  InitialPiece: 0
-  z: 0
-  Position: 0
-  OccupyingColorIsBlack: 0
-  Controlled: 0
+  gameMaster: {fileID: 0}
+  pieces: []
 --- !u!1001 &14854212760518222
 PrefabInstance:
   m_ObjectHideFlags: 0

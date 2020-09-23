@@ -5,105 +5,105 @@ using UnityEngine.UI;
 
 public class MoveControl : MonoBehaviour
 {
-    public GameControl GameMaster;
-    private GameObject CurrentPiece;
-    private List<PieceContainer> AvailableSpots = new List<PieceContainer>();
-    private List<PieceContainer> AvailableMoves = new List<PieceContainer>();
+    public GameControl gameMaster;
+    private GameObject currentPiece;
+    private List<PieceContainerObject> availableSpots = new List<PieceContainerObject>();
+    private List<PieceContainerObject> availableMoves = new List<PieceContainerObject>();
     public float y;
-    private float LocationX, LocationY, LocationZ;
+    private float locationX, locationY, locationZ;
     private short spot = 0;
     public int roll1, roll2 = 0;
-    private Transform OldParent;
-    private PieceContainer OldSpot;
-    private PieceContainer CurrentSpot;
-    public bool MyTurn, DiceRolled, Doubles, PlayerRolledDice, TurnOver, Winner = false;
-    private bool ListsSet, InitialSet, DiceViewed = false;
-    public bool IsBlack;
-    private JailControl Jail;
-    private BaseControl Base;
-    private Player Plyr;
-    private MeshRenderer MeshRend;
+    private Transform oldParent;
+    private PieceContainerControl oldSpot;
+    private PieceContainerControl currentSpot;
+    public bool myTurn, diceRolled, doubles, playerRolledDice, turnOver, winner = false;
+    private bool listsSet, initialSet, diceViewed = false;
+    public bool isBlack;
+    private PieceContainerObject jailControl;
+    private PieceContainerObject baseControl;
+    private Player player;
+    private MeshRenderer meshRend;
 
     //This is how to keep track of which rolls has been used
-    public bool[] RollsUsed; 
+    public bool[] rollsUsed; 
 
     // Start is called before the first frame update
     void Start()
     {
         //Black goes first
-        MyTurn = IsBlack;
+        myTurn = isBlack;
 
-        //Set jail and base variable based on color
-        if (IsBlack)
+        //Set jailControl and baseControl variable based on color
+        if (isBlack)
         {
-            Jail = GameMaster.BlackJailControl;
-            Base = GameMaster.BlackBaseControl;
+            jailControl = gameMaster.blackJailControl;
+            baseControl = gameMaster.blackBaseControl;
         }
         else
         {
-            Jail = GameMaster.WhiteJailControl;
-            Base = GameMaster.WhiteBaseControl;
+            jailControl = gameMaster.whiteJailControl;
+            baseControl = gameMaster.whiteBaseControl;
         }
             
-        MeshRend = GetComponentInChildren<MeshRenderer>();
-        MeshRend.enabled = false;
+        meshRend = GetComponentInChildren<MeshRenderer>();
+        meshRend.enabled = false;
 
-        //Declare length of 4 for Doubles
-        RollsUsed = new bool[4];
+        //Declare length of 4 for doubles
+        rollsUsed = new bool[4];
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!Winner)
+        if (!winner)
         {
-            if (MyTurn)
+            if (myTurn)
             {
-                GameMaster.CurrentMover = this;
+                gameMaster.currentMover = this;
 
-                if (TurnOver)
-                    Plyr.TurnOver();
+                if (turnOver)
+                    player.TurnOver();
                 else
                 {
                     //Roll dice if they haven't been yet
-                    if (!DiceRolled)
+                    if (!diceRolled)
                     {
-                        if (PlayerRolledDice)
+                        if (playerRolledDice)
                             StartCoroutine(RollDice());
                         else
-                            Plyr.RollDice();
-                    }else if (DiceViewed && !ListsSet)
+                            player.RollDice();
+                    }else if (diceViewed && !listsSet)
                         //Set list of available spots and pieces
                         SetAvailableLists();
-                    else if (ListsSet & !InitialSet)
+                    else if (listsSet & !initialSet)
                         //Set Location after lists have been set
                         SetInitialLocation();
-                    else if (ListsSet & InitialSet)
+                    else if (listsSet & initialSet)
                         //Enough time has passed for player to see result of dice
-                        Plyr.PickPieceOrSpot();
+                        player.PickPieceOrSpot();
 
-                    Plyr.CancelInquiry();
+                    player.CancelInquiry();
 
-                    transform.position = new Vector3(LocationX, LocationY, LocationZ);
+                    transform.position = new Vector3(locationX, locationY, locationZ);
                 }
             }
             else
             {
-                if (GameMaster.CurrentMover != this && !GameMaster.CurrentMover.MyTurn && !GameMaster.cam.flipping)
-                    MyTurn = true;
-                Plyr.ResetVariables();
-                DiceRolled = DiceViewed = PlayerRolledDice = ListsSet = InitialSet = false;
-                MeshRend.enabled = false;
+                if (gameMaster.currentMover != this && !gameMaster.currentMover.myTurn && !gameMaster.cam.flipping)
+                    myTurn = true;
+                player.ResetVariables();
+                diceRolled = diceViewed = playerRolledDice = listsSet = initialSet = false;
+                meshRend.enabled = false;
             }
         }
     }
 
     public void CancelSelection()
     {
-        MeshRend.material.color = Color.red;
-        CurrentPiece.transform.parent = OldParent;
-        OldSpot.GetComponent<SpotControl>().Changed = true;
-        InitialSet = false;
+        meshRend.material.color = Color.red;
+        currentPiece.transform.parent = oldParent;
+        oldSpot.changed = true;
+        initialSet = false;
     }
 
     public void SelectNextSpot(string direction)
@@ -113,7 +113,7 @@ public class MoveControl : MonoBehaviour
         switch (direction)
         {
             case "Up":
-                if (spot < AvailableSpots.Count - 1)
+                if (spot < availableSpots.Count - 1)
                     spot++;
                 else
                     spot = 0;
@@ -122,15 +122,37 @@ public class MoveControl : MonoBehaviour
                 if (spot > 0)
                     spot--;
                 else
-                    spot = (short)(AvailableSpots.Count - 1);
+                    spot = (short)(availableSpots.Count - 1);
                 break;
         }
-        CurrentSpot = AvailableSpots[spot];
-        CurrentPiece = CurrentSpot.Pieces[0];
-        LocationX = CurrentPiece.transform.position.x;
-        LocationY = CurrentPiece.transform.position.y + y;
-        LocationZ = CurrentPiece.transform.position.z;
+        currentSpot = availableSpots[spot].pcc;
+        currentPiece = currentSpot.pieces[0];
+        locationX = currentPiece.transform.position.x;
+        locationY = currentPiece.transform.position.y + y;
+        locationZ = currentPiece.transform.position.z;
         SetAvailableMoves();
+    }
+
+    public void SelectFirstSpot()
+    {
+        /*Move to first available Spot*/
+        spot = 0;
+        currentSpot = availableSpots[spot].pcc;
+        currentPiece = currentSpot.pieces[0];
+        locationX = currentPiece.transform.position.x;
+        locationY = currentPiece.transform.position.y + y;
+        locationZ = currentPiece.transform.position.z;
+        SetAvailableMoves();
+    }
+
+    public void SelectFirstMove()
+    {
+        /*Move to first available move*/
+        spot = 0;
+        currentSpot = availableMoves[spot].pcc;
+        locationX = availableMoves[spot].transform.position.x;
+        locationY = availableMoves[spot].transform.position.y + y;
+        locationZ = availableMoves[spot].transform.position.z;
     }
 
     public void SelectNextMove(string direction)
@@ -140,7 +162,7 @@ public class MoveControl : MonoBehaviour
         switch (direction)
         {
             case "Up":
-                if (spot < AvailableMoves.Count - 1)
+                if (spot < availableMoves.Count - 1)
                     spot++;
                 else
                     spot = 0;
@@ -149,73 +171,73 @@ public class MoveControl : MonoBehaviour
                 if (spot > 0)
                     spot--;
                 else
-                    spot = (short)(AvailableMoves.Count - 1);
+                    spot = (short)(availableMoves.Count - 1);
                 break;
         }
-        CurrentSpot = AvailableMoves[spot];
-        LocationX = AvailableMoves[spot].transform.position.x;
-        LocationY = AvailableMoves[spot].transform.position.y + y;
-        LocationZ = AvailableMoves[spot].transform.position.z;
+        currentSpot = availableMoves[spot].pcc;
+        locationX = availableMoves[spot].transform.position.x;
+        locationY = availableMoves[spot].transform.position.y + y;
+        locationZ = availableMoves[spot].transform.position.z;
     }
 
     public void SelectPiece()
     {
         //Set possible moves for piece selected
-        OldSpot = CurrentSpot;
+        oldSpot = currentSpot;
         //Save old parent of piece and set new parent to mover so piece moves with it
-        OldParent = CurrentPiece.transform.parent;
-        CurrentPiece.transform.parent = transform;
+        oldParent = currentPiece.transform.parent;
+        currentPiece.transform.parent = transform;
         //Set mover color to yellow to indicate piece selected 
         GetComponentInChildren<Renderer>().material.color = Color.yellow;
-        StartCoroutine(Plyr.SelectedPiece());
+        StartCoroutine(player.SelectedPiece());
     }
 
     public void SelectMove()
     {
-        foreach (PieceContainer pc in AvailableMoves)
+        foreach (PieceContainerObject pc in availableMoves)
             pc.Outline(false);
         //Calc Spots Moved (use abs because direction for white/black are opposite)
-        int spotsmoved = Mathf.Abs(CurrentSpot.Position - OldSpot.Position);
+        int spotsMoved = Mathf.Abs(currentSpot.position - oldSpot.position);
         //Remove piece from old spot and add to new
-        OldSpot.RemovePiece(CurrentPiece);
-        CurrentSpot.AddPiece(CurrentPiece);
+        oldSpot.RemovePiece(currentPiece);
+        currentSpot.AddPiece(currentPiece);
         //Drop piece from mover
-        CurrentPiece.transform.parent = OldParent;
+        currentPiece.transform.parent = oldParent;
         //Set mover color to red to indicate piece not selected
         GetComponentInChildren<Renderer>().material.color = Color.red;
-        StartCoroutine(Plyr.SelectedSpot());
+        StartCoroutine(player.SelectedSpot());
         //Update Rolls used based on spots moved
-        SetRollsUsed(spotsmoved);
+        SetRollsUsed(spotsMoved);
     }
 
-    public void SetPlayer(string PlayerType)
+    public void SetPlayer(string playerType)
     {
-        Plyr = PlayerFactory.GetPlayer(PlayerType);
-        Plyr.SetMover(this);
+        player = PlayerFactory.GetPlayer(playerType);
+        player.SetMover(this);
     }
 
     bool PickingFromJail()
     {
-        return (Jail.Pieces.Count > 0);
+        return (jailControl.pieces.Count > 0);
     }
 
     void SetRollsUsed(int spotsmoved)
     {
-        if (!Doubles)
+        if (!doubles)
         {
             //If the number of spots moved = one of the rolls -> That's the one used
-            if (spotsmoved == roll1 && !RollsUsed[0])
+            if (spotsmoved == roll1 && !rollsUsed[0])
                 SetUsedRoll(0); 
-            else if (spotsmoved == roll2 && !RollsUsed[1])
+            else if (spotsmoved == roll2 && !rollsUsed[1])
                 SetUsedRoll(1);  
             else
             {
                 //Spots moved is less than the rolls. Pick which ever one hasn't been used yet or the smallest.
-                if (RollsUsed[0] && !RollsUsed[1])
+                if (rollsUsed[0] && !rollsUsed[1])
                     SetUsedRoll(1);
-                else if (!RollsUsed[0] && RollsUsed[1])
+                else if (!rollsUsed[0] && rollsUsed[1])
                     SetUsedRoll(0);
-                else if (!RollsUsed[0] && !RollsUsed[1])
+                else if (!rollsUsed[0] && !rollsUsed[1])
                 {
                     if (roll1 < roll2)
                         SetUsedRoll(0);
@@ -228,16 +250,16 @@ public class MoveControl : MonoBehaviour
         {
             //If doubles just set next one that hasn't been used
             int x = 0;
-            while(RollsUsed[x])
+            while(rollsUsed[x])
                 x++;
             SetUsedRoll(x);
         }
-        ListsSet=false;
+        listsSet=false;
     }
 
     void SetUsedRoll(int x)
     {
-        RollsUsed[x] = true;
+        rollsUsed[x] = true;
         GameObject.Find(string.Concat("DiceRoll", x + 1)).GetComponent<DiceControl>().SetSprite(0);
     }
 
@@ -245,113 +267,136 @@ public class MoveControl : MonoBehaviour
     {
         //Resets the location of mover after recalcing available spots
         spot = 0;
-        CurrentSpot = AvailableSpots[spot];
-        CurrentPiece = CurrentSpot.Pieces[0];
-        LocationX = CurrentPiece.transform.position.x;
-        LocationY = CurrentPiece.transform.position.y + y;
-        LocationZ = CurrentPiece.transform.position.z;
+        currentSpot = availableSpots[spot].pcc;
+        currentPiece = currentSpot.pieces[0];
+        locationX = currentPiece.transform.position.x;
+        locationY = currentPiece.transform.position.y + y;
+        locationZ = currentPiece.transform.position.z;
         SetAvailableMoves();
-        MeshRend.enabled = true;
-        InitialSet = true;
+        meshRend.enabled = true;
+        initialSet = true;
     }
 
     IEnumerator RollDice() {
         //This will run on every update in the 1 second(s) it takes to set RiceRolled = true 
-        DiceViewed = false;
+        diceViewed = false;
 
         //Pick a random number between 1->6 for each dice
         roll1 = Random.Range(1, 6);
         roll2 = Random.Range(1, 6);
 
         //Set doubles bool
-        Doubles = (roll1 == roll2);
+        doubles = (roll1 == roll2);
 
-        //Have gamemaster control displaying the role
-        GameMaster.DisplayDice();
+        //Have gameMaster control displaying the role
+        gameMaster.DisplayDice();
 
-        //Refresh RollsUsed variables
-        RollsUsed[0] = RollsUsed[1] = false;
-        RollsUsed[2] = RollsUsed[3] = !Doubles;
+        //Refresh rollsUsed variables
+        rollsUsed[0] = rollsUsed[1] = false;
+        rollsUsed[2] = rollsUsed[3] = !doubles;
 
         //Wait a little to simulate real dice roll
         yield return new WaitForSecondsRealtime(1f);
-        DiceRolled = true;
+        diceRolled = true;
         yield return new WaitForSecondsRealtime(.5f);
-        DiceViewed = true;
+        diceViewed = true;
     }
 
     void SetAvailableLists()
     {
         //Check if win
-        if(Base.Pieces.Count == 15)
-            Winner = true;
+        if(baseControl.pieces.Count == 15)
+            winner = true;
         else
         {
             //Clear old lists
-            AvailableSpots.Clear();
-            CurrentPiece = null;
-            //If picking from jail there is no need to check all other spots
+            availableSpots.Clear();
+            currentPiece = null;
+            //If picking from Jail there is no need to check all other spots
             if (PickingFromJail())
             {
-                Jail.GetPossibleMoves(IsBlack, roll1, roll2);
-                if (Jail.ActualPossibleMoves.Count > 0)
-                    AvailableSpots.Add(Jail);
+                jailControl.pcc.GetPossibleMoves(isBlack, roll1, roll2, rollsUsed);
+                if (jailControl.pcc.actualPossibleMoves.Count > 0)
+                    availableSpots.Add(jailControl);       
             }
             else
             {
                 //Check each spot for possible moves
-                foreach (PieceContainer s in GameMaster.AllSpots)
+                foreach (PieceContainerObject s in gameMaster.allSpots)
                 {
-                    s.GetPossibleMoves(IsBlack, roll1, roll2);
-                    if (s.ActualPossibleMoves.Count > 0)
+                    s.pcc.GetPossibleMoves(isBlack, roll1, roll2, rollsUsed);
+                    if (s.pcc.actualPossibleMoves.Count > 0)
                     {
-                        if (!AvailableSpots.Contains(s) && s.Pieces.Count > 0)
-                            AvailableSpots.Add(s);
+                        if (!availableSpots.Contains(s) && s.pieces.Count > 0)
+                        {
+                            if (!isBlack)
+                                availableSpots.Add(s);
+                            else
+                                availableSpots.Insert(0, s);
+                        }   
                     }
                 }
                 //If bearing off check the base for any possible moves
-                if (Base.BearingOff())
+                BaseControl bc = (BaseControl)baseControl.pcc;
+                if (bc.BearingOff())
                 {
-                    Base.GetPossibleMoves(IsBlack, roll1, roll2);
-                    if (Base.ActualPossibleMoves.Count > 0)
+                    baseControl.pcc.GetPossibleMoves(isBlack, roll1, roll2, rollsUsed);
+                    if (baseControl.pcc.actualPossibleMoves.Count > 0)
                     {
-                        foreach (PieceContainer s in Base.ActualPossibleMoves)
+                        foreach (int spotPos in baseControl.pcc.actualPossibleMoves)
                         {
-                            if (!AvailableSpots.Contains(s) && s.Pieces.Count > 0)
-                                AvailableSpots.Add(s);
+                            SpotControl sc = (SpotControl) gameMaster.allSpots[spotPos].pcc;
+                            if (!availableSpots.Contains(gameMaster.allSpots[spotPos]) && sc.pieces.Count > 0)
+                            {
+                                if (!isBlack)
+                                    availableSpots.Add(gameMaster.allSpots[spotPos]);
+                                else
+                                    availableSpots.Insert(0, gameMaster.allSpots[spotPos]);
+                            }     
                         }
                     }
                 }
             }
             //If there are no available spots left -> turn is over
-            if (AvailableSpots.Count == 0)
-                TurnOver = true;
+            if (availableSpots.Count == 0)
+                turnOver = true;
             else
             {
                 //Indicate that lists are set and the mover can move to initial spot
-                ListsSet = true;
-                InitialSet = false;
+                listsSet = true;
+                initialSet = false;
             }
         }        
     }
 
     private void SetAvailableMoves()
     {
-        foreach (PieceContainer pc in AvailableMoves)
+        foreach (PieceContainerObject pc in availableMoves)
             pc.Outline(false);
-        AvailableMoves = CurrentSpot.ActualPossibleMoves;
-        if (Base.BearingOff() && Base.ActualPossibleMoves.Contains(CurrentSpot))
-            AvailableMoves.Add(Base);
-        foreach (PieceContainer pc in AvailableMoves)
+        availableMoves.Clear();
+        foreach(int spotPos in currentSpot.actualPossibleMoves)
+            availableMoves.Add(gameMaster.allSpots[spotPos]);
+        BaseControl bc = (BaseControl)baseControl.pcc;
+        if (bc.BearingOff() && bc.actualPossibleMoves.Contains(currentSpot.position))
+            availableMoves.Add(baseControl);
+        foreach (PieceContainerObject pc in availableMoves)
             pc.Outline(true);
     }
 
     public int GetNumAvailable(bool PieceSelected)
     {
         if (!PieceSelected)
-            return AvailableSpots.Count;
+            return availableSpots.Count;
         else
-            return AvailableMoves.Count;
+            return availableMoves.Count;
+    }
+
+    public List<PieceContainerControl> GetAvailableSpots()
+    {
+        List<PieceContainerControl> pcList = new List<PieceContainerControl>();
+        foreach (PieceContainerObject pco in availableSpots)
+            pcList.Add(pco.pcc);
+        return pcList;
     }
 
 }

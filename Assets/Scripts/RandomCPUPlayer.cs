@@ -9,20 +9,20 @@ public class RandomCPUPlayer : Player
     public override void PickPieceOrSpot()
     {
         //Select random piece or spot
-        if (ListenForPick)
+        if (listenForPick)
         {
-            ListenForPick = false;
-            rand = Random.Range(0, MoveCont.GetNumAvailable(PieceSelected));
+            listenForPick = false;
+            rand = Random.Range(0, moveCont.GetNumAvailable(pieceSelected));
         }else if (rand > 0)
         {
             SelectNext("Up");
             rand--;
         }else if (rand == 0)
         {
-            if (!PieceSelected)
-                MoveCont.SelectPiece();
+            if (!pieceSelected)
+                moveCont.SelectPiece();
             else
-                MoveCont.SelectMove();
+                moveCont.SelectMove();
             rand = -1;
         }
     }

@@ -4,9 +4,9 @@ using UnityEngine;
 
 public static class PlayerFactory
 {
-    public static Player GetPlayer(string PlayerType)
+    public static Player GetPlayer(string playerType)
     {
-        switch (PlayerType)
+        switch (playerType)
         {
             case "Human":
                 return new HumanPlayer();

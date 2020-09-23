@@ -72,7 +72,9 @@
     <Compile Include="Assets\Scripts\HumanPlayer.cs" />
     <Compile Include="Assets\Scripts\JailControl.cs" />
     <Compile Include="Assets\Scripts\MoveControl.cs" />
-    <Compile Include="Assets\Scripts\PieceContainer.cs" />
+    <Compile Include="Assets\Scripts\PieceContainerControl.cs" />
+    <Compile Include="Assets\Scripts\PieceContainerFactory.cs" />
+    <Compile Include="Assets\Scripts\PieceContainerObject.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Scripts\PlayerFactory.cs" />
     <Compile Include="Assets\Scripts\PlayerSelectionControl.cs" />
