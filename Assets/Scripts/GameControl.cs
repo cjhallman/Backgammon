@@ -47,7 +47,6 @@ public class GameControl : MonoBehaviour
         else if (currentMover.turnOver)
         {
             //Tell them that they have no more moves to make
-            SetMessage("Press space to pass control to other player");
             currentMover.GetComponentInChildren<MeshRenderer>().enabled = false;
         }
         else if (!currentMover.diceRolled && !currentMover.playerRolledDice && !cam.flipping)

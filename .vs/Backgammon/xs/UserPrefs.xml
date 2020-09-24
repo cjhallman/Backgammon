@@ -1,15 +1,16 @@
 ﻿<Properties StartupConfiguration="{C18058CC-1200-F19A-9E29-1B4B728CB551}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/PlayerFactory.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/GameControl.cs">
     <Files>
-      <File FileName="Assets/Scripts/AggressiveCPUPlayer.cs" Line="12" Column="20" />
-      <File FileName="Assets/Scripts/RandomCPUPlayer.cs" Line="16" Column="23" />
-      <File FileName="Assets/Scripts/PieceContainerObject.cs" Line="24" Column="32" />
-      <File FileName="Assets/Scripts/MoveControl.cs" Line="85" Column="1" />
-      <File FileName="Assets/Scripts/SpotControl.cs" Line="78" Column="1" />
-      <File FileName="Assets/Scripts/Player.cs" Line="10" Column="21" />
-      <File FileName="Assets/Scripts/SimpleCPUPlayer.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/GameControl.cs" Line="44" Column="1" />
-      <File FileName="Assets/Scripts/PlayerFactory.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/AggressiveCPUPlayer.cs" Line="31" Column="17" />
+      <File FileName="Assets/Scripts/RandomCPUPlayer.cs" />
+      <File FileName="Assets/Scripts/PieceContainerObject.cs" />
+      <File FileName="Assets/Scripts/MoveControl.cs" />
+      <File FileName="Assets/Scripts/SpotControl.cs" />
+      <File FileName="Assets/Scripts/Player.cs" />
+      <File FileName="Assets/Scripts/SimpleCPUPlayer.cs" />
+      <File FileName="Assets/Scripts/GameControl.cs" Line="53" Column="10" />
+      <File FileName="Assets/Scripts/PlayerFactory.cs" />
+      <File FileName="Assets/Scripts/CameraControl.cs" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -17,7 +18,7 @@
           <Node name="Backgammon" expanded="True">
             <Node name="Assets" expanded="True">
               <Node name="Scripts" expanded="True">
-                <Node name="PlayerFactory.cs" selected="True" />
+                <Node name="GameControl.cs" selected="True" />
               </Node>
             </Node>
           </Node>
@@ -27,11 +28,11 @@
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="9b0f4e6a-e4f9-496e-b974-097dd0f7f365" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="ea4c1b4c-61e5-4ca5-b9cf-9c1bf1f6d5a9" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="/Users/connorhallman/Desktop/Backgammon/Assets/PlayerSelector.cs" relfile="Assets/PlayerSelector.cs" line="25" column="1" />
-      <Breakpoint file="/Users/connorhallman/Desktop/Backgammon/Assets/Scripts/RandomCPUPlayer.cs" relfile="Assets/Scripts/RandomCPUPlayer.cs" line="12" column="1" />
+      <Breakpoint file="/Users/connorhallman/Desktop/Backgammon/Assets/Scripts/MoveControl.cs" relfile="Assets/Scripts/MoveControl.cs" line="113" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MultiItemStartupConfigurations />
