@@ -25,7 +25,7 @@ public class BaseControl : PieceContainerControl
         isBlack = pcc.isBlack;
     }
 
-    public override void InitializeOtherPieceContainerControls(PieceContainerControl[] arrPcc, PieceContainerControl whiteJail, PieceContainerControl blackJail)
+    public override void InitializeOtherPieceContainerControls(PieceContainerControl[] arrPcc, PieceContainerControl whiteJail, PieceContainerControl blackJail, PieceContainerControl whiteBase, PieceContainerControl blackBase)
     {
         allSpots = arrPcc;
     }

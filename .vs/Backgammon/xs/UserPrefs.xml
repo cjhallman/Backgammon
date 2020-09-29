@@ -1,16 +1,22 @@
 ﻿<Properties StartupConfiguration="{C18058CC-1200-F19A-9E29-1B4B728CB551}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/GameControl.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/JailControl.cs">
     <Files>
-      <File FileName="Assets/Scripts/AggressiveCPUPlayer.cs" Line="31" Column="17" />
-      <File FileName="Assets/Scripts/RandomCPUPlayer.cs" />
-      <File FileName="Assets/Scripts/PieceContainerObject.cs" />
-      <File FileName="Assets/Scripts/MoveControl.cs" />
-      <File FileName="Assets/Scripts/SpotControl.cs" />
-      <File FileName="Assets/Scripts/Player.cs" />
-      <File FileName="Assets/Scripts/SimpleCPUPlayer.cs" />
+      <File FileName="Assets/Scripts/AggressiveCPUPlayer.cs" Line="55" Column="57" />
+      <File FileName="Assets/Scripts/RandomCPUPlayer.cs" Line="21" Column="41" />
+      <File FileName="Assets/Scripts/PieceContainerObject.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/MoveControl.cs" Line="385" Column="45" />
+      <File FileName="Assets/Scripts/SpotControl.cs" Line="49" Column="227" />
+      <File FileName="Assets/Scripts/Player.cs" Line="63" Column="29" />
+      <File FileName="Assets/Scripts/SimpleCPUPlayer.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/GameControl.cs" Line="53" Column="10" />
-      <File FileName="Assets/Scripts/PlayerFactory.cs" />
+      <File FileName="Assets/Scripts/PlayerFactory.cs" Line="17" Column="33" />
       <File FileName="Assets/Scripts/CameraControl.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/NewStruct.cs" Line="8" Column="22" />
+      <File FileName="Assets/Scripts/GameState.cs" Line="22" Column="107" />
+      <File FileName="Assets/Scripts/NewClass.cs" Line="28" Column="31" />
+      <File FileName="Assets/Scripts/PieceContainerControl.cs" Line="41" Column="1" />
+      <File FileName="Assets/Scripts/BaseControl.cs" Line="28" Column="227" />
+      <File FileName="Assets/Scripts/JailControl.cs" Line="38" Column="21" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -18,7 +24,7 @@
           <Node name="Backgammon" expanded="True">
             <Node name="Assets" expanded="True">
               <Node name="Scripts" expanded="True">
-                <Node name="GameControl.cs" selected="True" />
+                <Node name="JailControl.cs" selected="True" />
               </Node>
             </Node>
           </Node>
@@ -28,11 +34,12 @@
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="ea4c1b4c-61e5-4ca5-b9cf-9c1bf1f6d5a9" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="1befec7a-4358-4a83-a530-5e2e536d6943" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="/Users/connorhallman/Desktop/Backgammon/Assets/PlayerSelector.cs" relfile="Assets/PlayerSelector.cs" line="25" column="1" />
-      <Breakpoint file="/Users/connorhallman/Desktop/Backgammon/Assets/Scripts/MoveControl.cs" relfile="Assets/Scripts/MoveControl.cs" line="113" column="1" />
+      <Breakpoint file="/Users/connorhallman/Desktop/Backgammon/Assets/Scripts/NormalCPUPlayer.cs" relfile="Assets/Scripts/NormalCPUPlayer.cs" line="25" column="1" />
+      <Breakpoint file="/Users/connorhallman/Desktop/Backgammon/Assets/Scripts/AggressiveCPUPlayer.cs" relfile="Assets/Scripts/AggressiveCPUPlayer.cs" line="47" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MultiItemStartupConfigurations />

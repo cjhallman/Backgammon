@@ -10,6 +10,9 @@ public class SpotControl : PieceContainerControl
     private PieceContainerControl whiteJailControl;
     private PieceContainerControl blackJailControl;
     private PieceContainerControl jailControl;
+    private PieceContainerControl whiteBaseControl;
+    private PieceContainerControl blackBaseControl;
+    private PieceContainerControl baseControl;
 
     private int quadrant, numInQuadrant;
 
@@ -38,14 +41,18 @@ public class SpotControl : PieceContainerControl
             allSpots[x] = gm.allSpots[x].pcc;
         whiteJailControl = gm.whiteJailControl.pcc;
         blackJailControl = gm.blackJailControl.pcc;
+        whiteBaseControl = gm.whiteBaseControl.pcc;
+        blackBaseControl = gm.blackBaseControl.pcc;
         SetControlledVariables();
     }
 
-    public override void InitializeOtherPieceContainerControls(PieceContainerControl[] arrPcc, PieceContainerControl whiteJail, PieceContainerControl blackJail)
+    public override void InitializeOtherPieceContainerControls(PieceContainerControl[] arrPcc, PieceContainerControl whiteJail, PieceContainerControl blackJail, PieceContainerControl whiteBase, PieceContainerControl blackBase)
     {
         allSpots = arrPcc;
         whiteJailControl = whiteJail;
         blackJailControl = blackJail;
+        whiteBaseControl = whiteBase;
+        blackBaseControl = blackBase;
         SetControlledVariables();
     }
 
@@ -133,16 +140,23 @@ public class SpotControl : PieceContainerControl
             isBlack = (pieces[0].name[0] == 'B');
         }
         if (isBlack)
+        {
             jailControl = blackJailControl;
+            baseControl = blackBaseControl;
+        }
         else
+        {
             jailControl = whiteJailControl;
+            baseControl = whiteBaseControl;
+        }
+            
     }
 
     public override void GetPossibleMoves(bool black, int roll1, int roll2, bool[] rollsUsed)
     {
         bool doubles = (roll1 == roll2);
         actualPossibleMoves.Clear();
-        if (black == isBlack)
+        if (black == isBlack && pieces.Count > 0)
         {
             List<int> positions;
             if (!black)
@@ -178,8 +192,12 @@ public class SpotControl : PieceContainerControl
                         }
                     }
                     counter++;
-                }          
-            }   
+                }         
+            }
+            BaseControl bc = (BaseControl)baseControl;
+            if (bc.BearingOff() && bc.actualPossibleMoves.Contains(position))
+                actualPossibleMoves.Add(baseControl.position);
         }
+
     }
 }

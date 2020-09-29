@@ -130,6 +130,7 @@ public class MoveControl : MonoBehaviour
         locationX = currentPiece.transform.position.x;
         locationY = currentPiece.transform.position.y + y;
         locationZ = currentPiece.transform.position.z;
+        StartCoroutine(player.SetListenForNextSelect());
         SetAvailableMoves();
     }
 
@@ -142,6 +143,7 @@ public class MoveControl : MonoBehaviour
         locationX = currentPiece.transform.position.x;
         locationY = currentPiece.transform.position.y + y;
         locationZ = currentPiece.transform.position.z;
+        StartCoroutine(player.SetListenForNextSelect());
         SetAvailableMoves();
     }
 
@@ -153,6 +155,7 @@ public class MoveControl : MonoBehaviour
         locationX = availableMoves[spot].transform.position.x;
         locationY = availableMoves[spot].transform.position.y + y;
         locationZ = availableMoves[spot].transform.position.z;
+        StartCoroutine(player.SetListenForNextSelect());
     }
 
     public void SelectNextMove(string direction)
@@ -178,6 +181,7 @@ public class MoveControl : MonoBehaviour
         locationX = availableMoves[spot].transform.position.x;
         locationY = availableMoves[spot].transform.position.y + y;
         locationZ = availableMoves[spot].transform.position.z;
+        StartCoroutine(player.SetListenForNextSelect());
     }
 
     public void SelectPiece()
@@ -321,6 +325,8 @@ public class MoveControl : MonoBehaviour
             }
             else
             {
+                //set basecontrol possible moves so spot can use it to calc its possible moves
+                baseControl.pcc.GetPossibleMoves(isBlack, roll1, roll2, rollsUsed);
                 //Check each spot for possible moves
                 foreach (PieceContainerObject s in gameMaster.allSpots)
                 {
@@ -334,26 +340,6 @@ public class MoveControl : MonoBehaviour
                             else
                                 availableSpots.Insert(0, s);
                         }   
-                    }
-                }
-                //If bearing off check the base for any possible moves
-                BaseControl bc = (BaseControl)baseControl.pcc;
-                if (bc.BearingOff())
-                {
-                    baseControl.pcc.GetPossibleMoves(isBlack, roll1, roll2, rollsUsed);
-                    if (baseControl.pcc.actualPossibleMoves.Count > 0)
-                    {
-                        foreach (int spotPos in baseControl.pcc.actualPossibleMoves)
-                        {
-                            SpotControl sc = (SpotControl) gameMaster.allSpots[spotPos].pcc;
-                            if (!availableSpots.Contains(gameMaster.allSpots[spotPos]) && sc.pieces.Count > 0)
-                            {
-                                if (!isBlack)
-                                    availableSpots.Add(gameMaster.allSpots[spotPos]);
-                                else
-                                    availableSpots.Insert(0, gameMaster.allSpots[spotPos]);
-                            }     
-                        }
                     }
                 }
             }
@@ -375,10 +361,12 @@ public class MoveControl : MonoBehaviour
             pc.Outline(false);
         availableMoves.Clear();
         foreach(int spotPos in currentSpot.actualPossibleMoves)
-            availableMoves.Add(gameMaster.allSpots[spotPos]);
-        BaseControl bc = (BaseControl)baseControl.pcc;
-        if (bc.BearingOff() && bc.actualPossibleMoves.Contains(currentSpot.position))
-            availableMoves.Add(baseControl);
+        {
+            if(spotPos>-1 && spotPos < 24)
+                availableMoves.Add(gameMaster.allSpots[spotPos]);
+            else
+                availableMoves.Add(baseControl);
+        }
         foreach (PieceContainerObject pc in availableMoves)
             pc.Outline(true);
     }

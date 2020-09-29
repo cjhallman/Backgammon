@@ -19,7 +19,7 @@ public class GameState
         blackBase = PieceContainerFactory.GetPieceContainer(initGameMaster.blackBaseControl);
         whiteBase = PieceContainerFactory.GetPieceContainer(initGameMaster.whiteBaseControl);
         foreach (PieceContainerControl pcc in allSpots)
-            pcc.InitializeOtherPieceContainerControls(allSpots, whiteJail, blackJail);
+            pcc.InitializeOtherPieceContainerControls(allSpots, whiteJail, blackJail, whiteBase, blackBase);
         blackJail.InitializeOtherPieceContainerControls(allSpots);
         whiteJail.InitializeOtherPieceContainerControls(allSpots);
         blackBase.InitializeOtherPieceContainerControls(allSpots);
@@ -34,53 +34,18 @@ public class GameState
             return blackJail.pieces.Count;
     }
 
-    public void UndoLastMove(int initPosition, int endPosition, bool isBlack)
-    {
-        GameObject currentPiece;
-        //Remove from end spot
-        if (endPosition >= 0 && endPosition < allSpots.Length)
-        {
-            currentPiece = allSpots[endPosition].pieces[allSpots[endPosition].pieces.Count - 1];
-            allSpots[endPosition].RemovePiece(currentPiece);
-        }
-        else
-        {
-            if (isBlack)
-            {
-                currentPiece = blackBase.pieces[blackBase.pieces.Count - 1];
-                blackBase.RemovePiece(currentPiece);
-            }
-            else
-            {
-                currentPiece = whiteBase.pieces[whiteBase.pieces.Count - 1];
-                whiteBase.RemovePiece(currentPiece);
-            }   
-        }
-        //Add to initial Spot
-        if (initPosition >= 0 && initPosition < allSpots.Length)
-            allSpots[initPosition].AddPiece(currentPiece);
-        else
-        {
-            if (isBlack)
-                blackJail.AddPiece(currentPiece);
-            else
-                whiteJail.AddPiece(currentPiece);
-        }
-        
-    }
-
-    public void MakeMove(int initPosition, int endPosition, bool isBlack)
+    public int MakeMove(MoveStruct ms)
     {
         GameObject currentPiece;
         //Remove from initial Spot
-        if (initPosition >= 0 && initPosition < allSpots.Length)
+        if (ms.initPosition >= 0 && ms.initPosition < allSpots.Length)
         {
-            currentPiece = allSpots[initPosition].pieces[0];
-            allSpots[initPosition].RemovePiece(currentPiece);
+            currentPiece = allSpots[ms.initPosition].pieces[0];
+            allSpots[ms.initPosition].RemovePiece(currentPiece);
         }
         else
         {
-            if (isBlack)
+            if (ms.isBlack)
             {
                 currentPiece = blackJail.pieces[0];
                 blackJail.RemovePiece(currentPiece);
@@ -92,14 +57,47 @@ public class GameState
             }
         }
         //Add to end spot
-        if(endPosition >= 0 && endPosition < allSpots.Length)
-            allSpots[endPosition].AddPiece(currentPiece);
+        if(ms.endPosition >= 0 && ms.endPosition < allSpots.Length)
+            allSpots[ms.endPosition].AddPiece(currentPiece);
         else
         {
-            if (isBlack)
+            if (ms.isBlack)
                 blackBase.AddPiece(currentPiece);
             else
                 whiteBase.AddPiece(currentPiece);
         }
+
+        return GetScore(ms.isBlack);
+    }
+
+    private int GetScore(bool isBlack)
+    {
+        int score = 0;
+        if (isBlack)
+        {
+            score += blackBase.pieces.Count*3;
+            score += whiteJail.pieces.Count*2;
+        }
+        else
+        {
+            score += whiteBase.pieces.Count*3;
+            score += blackJail.pieces.Count*2;
+        }
+            
+        foreach(PieceContainerControl pc in allSpots)
+        {
+            if(pc.pieces.Count > 0)
+            {
+                if (pc.isBlack == isBlack)
+                {
+                    if (pc.pieces.Count > 1)
+                        score+=1;
+                    else
+                        score-=2;
+                }
+            }
+        }
+
+        return score;
     }
 }

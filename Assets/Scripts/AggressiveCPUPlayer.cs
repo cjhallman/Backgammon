@@ -20,21 +20,27 @@ public class AggressiveCPUPlayer : Player
                 ups = selectedSpot;
             else ups = selectedMove;
         }
-        else if (ups > 0)
+        else if (listenForSelect)
         {
-            SelectNext("Up");
-            ups--;
-        }else if(ups == 0)
-        {
-            if (!pieceSelected)
-                moveCont.SelectPiece();
-            else
+            if (ups > 0)
             {
-                moveCont.SelectMove();
-                moveChosen = false;
-            }  
-            ups = -1;
+                listenForSelect = false;
+                SelectNext("Up");
+                ups--;
+            }
+            else if (ups == 0)
+            {
+                if (!pieceSelected)
+                    moveCont.SelectPiece();
+                else
+                {
+                    moveCont.SelectMove();
+                    moveChosen = false;
+                }
+                ups = -1;
+            }
         }
+        
     }
     private void CalculateMove()
     {
@@ -43,19 +49,28 @@ public class AggressiveCPUPlayer : Player
         selectedSpot = 0;
         //Find move that leads to most opponent players off board
         List<PieceContainerControl> spots = moveCont.GetAvailableSpots();
+        MoveStruct bestMove = new MoveStruct();
         foreach (PieceContainerControl init in spots)
         {
             foreach (int end in init.actualPossibleMoves)
             {
                 //Decide if this is the move we want
                 GameState gs = new GameState(moveCont.gameMaster);
+                MoveStruct ms = new MoveStruct();
+                ms.initPosition = init.position;
+                ms.endPosition = end;
+                ms.isBlack = moveCont.isBlack;
+                ms.moveUps = selectedMove;
+                ms.spotUps = selectedSpot;
                 int currentNumOpponentsInJail = gs.GetNumOpponentsInJail(moveCont.isBlack);
-                gs.MakeMove(init.position, end, moveCont.isBlack);
+                ms.score = gs.MakeMove(ms);
                 if (gs.GetNumOpponentsInJail(moveCont.isBlack) > currentNumOpponentsInJail)
                 {
                     moveChosen = true;
                     break;
                 }
+                if(ms.score > bestMove.score)
+                    bestMove = ms;
                 selectedMove++;
             }
             if (moveChosen)
@@ -66,7 +81,8 @@ public class AggressiveCPUPlayer : Player
         if (!moveChosen)
         {
             moveChosen = true;
-            selectedSpot = 0;
+            selectedSpot = bestMove.spotUps;
+            selectedMove = bestMove.moveUps;
         }
     }
 }

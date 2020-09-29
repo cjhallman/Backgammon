@@ -45,10 +45,7 @@ public class GameControl : MonoBehaviour
         if (currentMover.winner)
             SetMessage((currentMover.isBlack ? "Black " : "White ") + "wins!");
         else if (currentMover.turnOver)
-        {
-            //Tell them that they have no more moves to make
             currentMover.GetComponentInChildren<MeshRenderer>().enabled = false;
-        }
         else if (!currentMover.diceRolled && !currentMover.playerRolledDice && !cam.flipping)
         {
             SetMessage((currentMover.isBlack ? "Black: " : "White: ") + "Press space bar to roll dice");

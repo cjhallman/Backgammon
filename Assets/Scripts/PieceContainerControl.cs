@@ -36,5 +36,5 @@ public abstract class PieceContainerControl
     public abstract Vector3 CalculatePiecePosition(int x, Vector3 position);
     public abstract void GetPossibleMoves(bool black, int roll1, int roll2, bool[] rollsUsed);
     public abstract void CalcPossibleMoves();
-    public abstract void InitializeOtherPieceContainerControls(PieceContainerControl[] arrPcc, PieceContainerControl whiteJail = null, PieceContainerControl blackJail = null);
+    public abstract void InitializeOtherPieceContainerControls(PieceContainerControl[] arrPcc, PieceContainerControl whiteJail = null, PieceContainerControl blackJail = null, PieceContainerControl whiteBase = null, PieceContainerControl blackBase = null);
 }

@@ -13,17 +13,23 @@ public class RandomCPUPlayer : Player
         {
             listenForPick = false;
             rand = Random.Range(0, moveCont.GetNumAvailable(pieceSelected));
-        }else if (rand > 0)
+        }
+        else if (listenForSelect)
         {
-            SelectNext("Up");
-            rand--;
-        }else if (rand == 0)
-        {
-            if (!pieceSelected)
-                moveCont.SelectPiece();
-            else
-                moveCont.SelectMove();
-            rand = -1;
+            if (rand > 0)
+            {
+                listenForSelect = false;
+                SelectNext("Up");
+                rand--;
+            }
+            else if (rand == 0)
+            {
+                if (!pieceSelected)
+                    moveCont.SelectPiece();
+                else
+                    moveCont.SelectMove();
+                rand = -1;
+            }
         }
     }
 }

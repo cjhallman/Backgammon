@@ -227,7 +227,7 @@ MonoBehaviour:
   colorText: {fileID: 282294249}
   playerTypeText: {fileID: 1445362905}
   playerTypes:
-  - Human
+  - Aggressive CPU
 --- !u!114 &79412036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3370,6 +3370,86 @@ PrefabInstance:
       propertyPath: gameMaster
       value: 
       objectReference: {fileID: 1479789746}
+    - target: {fileID: 6381982797565551459, guid: 0c071bc52ad15461facd5371af969256,
+        type: 3}
+      propertyPath: pieces.Array.size
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 6381982797565551459, guid: 0c071bc52ad15461facd5371af969256,
+        type: 3}
+      propertyPath: pieces.Array.data[0]
+      value: 
+      objectReference: {fileID: 536177355}
+    - target: {fileID: 6381982797565551459, guid: 0c071bc52ad15461facd5371af969256,
+        type: 3}
+      propertyPath: pieces.Array.data[1]
+      value: 
+      objectReference: {fileID: 1392015483}
+    - target: {fileID: 6381982797565551459, guid: 0c071bc52ad15461facd5371af969256,
+        type: 3}
+      propertyPath: pieces.Array.data[2]
+      value: 
+      objectReference: {fileID: 326246706}
+    - target: {fileID: 6381982797565551459, guid: 0c071bc52ad15461facd5371af969256,
+        type: 3}
+      propertyPath: pieces.Array.data[3]
+      value: 
+      objectReference: {fileID: 1240366666}
+    - target: {fileID: 6381982797565551459, guid: 0c071bc52ad15461facd5371af969256,
+        type: 3}
+      propertyPath: pieces.Array.data[4]
+      value: 
+      objectReference: {fileID: 979801608}
+    - target: {fileID: 6381982797565551459, guid: 0c071bc52ad15461facd5371af969256,
+        type: 3}
+      propertyPath: pieces.Array.data[5]
+      value: 
+      objectReference: {fileID: 635046179}
+    - target: {fileID: 6381982797565551459, guid: 0c071bc52ad15461facd5371af969256,
+        type: 3}
+      propertyPath: pieces.Array.data[6]
+      value: 
+      objectReference: {fileID: 297859567}
+    - target: {fileID: 6381982797565551459, guid: 0c071bc52ad15461facd5371af969256,
+        type: 3}
+      propertyPath: pieces.Array.data[7]
+      value: 
+      objectReference: {fileID: 307998307}
+    - target: {fileID: 6381982797565551459, guid: 0c071bc52ad15461facd5371af969256,
+        type: 3}
+      propertyPath: pieces.Array.data[8]
+      value: 
+      objectReference: {fileID: 671920496}
+    - target: {fileID: 6381982797565551459, guid: 0c071bc52ad15461facd5371af969256,
+        type: 3}
+      propertyPath: pieces.Array.data[9]
+      value: 
+      objectReference: {fileID: 692255656}
+    - target: {fileID: 6381982797565551459, guid: 0c071bc52ad15461facd5371af969256,
+        type: 3}
+      propertyPath: pieces.Array.data[10]
+      value: 
+      objectReference: {fileID: 685618692}
+    - target: {fileID: 6381982797565551459, guid: 0c071bc52ad15461facd5371af969256,
+        type: 3}
+      propertyPath: pieces.Array.data[11]
+      value: 
+      objectReference: {fileID: 246999535}
+    - target: {fileID: 6381982797565551459, guid: 0c071bc52ad15461facd5371af969256,
+        type: 3}
+      propertyPath: pieces.Array.data[12]
+      value: 
+      objectReference: {fileID: 1005982599}
+    - target: {fileID: 6381982797565551459, guid: 0c071bc52ad15461facd5371af969256,
+        type: 3}
+      propertyPath: pieces.Array.data[13]
+      value: 
+      objectReference: {fileID: 1276158488}
+    - target: {fileID: 6381982797565551459, guid: 0c071bc52ad15461facd5371af969256,
+        type: 3}
+      propertyPath: pieces.Array.data[14]
+      value: 
+      objectReference: {fileID: 852439354}
     m_RemovedComponents:
     - {fileID: 1541381697045675427, guid: 0c071bc52ad15461facd5371af969256, type: 3}
     - {fileID: 3214736328247976478, guid: 0c071bc52ad15461facd5371af969256, type: 3}
@@ -7785,7 +7865,7 @@ PrefabInstance:
     - target: {fileID: 4466637697473684953, guid: 0c071bc52ad15461facd5371af969256,
         type: 3}
       propertyPath: pieces.Array.size
-      value: 15
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4466637697473684953, guid: 0c071bc52ad15461facd5371af969256,
         type: 3}

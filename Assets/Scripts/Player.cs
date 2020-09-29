@@ -7,8 +7,9 @@ public abstract class Player
     protected MoveControl moveCont;
     protected bool pieceSelected = false;
     protected bool listenForPick = true;
-    protected float secondsToWait = .1f;
-
+    protected bool listenForSelect = true;
+    protected float secondsToWait = .5f;
+    
     public abstract void PickPieceOrSpot();
 
     public void SetMover(MoveControl paramMoveCont)
@@ -20,6 +21,7 @@ public abstract class Player
     {
         moveCont.gameMaster.SwitchTurns();
     }
+
     public virtual void RollDice()
     {
         moveCont.playerRolledDice = true;
@@ -69,5 +71,11 @@ public abstract class Player
         //choosing a spot to move piece to
         else
             moveCont.SelectFirstMove();
+    }
+
+    public IEnumerator SetListenForNextSelect()
+    {
+        yield return new WaitForSecondsRealtime(secondsToWait);
+        listenForSelect = true;
     }
 }
