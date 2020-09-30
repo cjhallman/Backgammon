@@ -75,26 +75,32 @@ public class GameState
         int score = 0;
         if (isBlack)
         {
-            score += blackBase.pieces.Count*3;
-            score += whiteJail.pieces.Count*2;
+            score += blackBase.pieces.Count*5;
+            score += whiteJail.pieces.Count*4;
         }
         else
         {
-            score += whiteBase.pieces.Count*3;
-            score += blackJail.pieces.Count*2;
+            score += whiteBase.pieces.Count*5;
+            score += blackJail.pieces.Count*4;
         }
             
-        foreach(PieceContainerControl pc in allSpots)
+        foreach(SpotControl pc in allSpots)
         {
-            if(pc.pieces.Count > 0)
+            if (pc.pieces.Count > 1)
             {
                 if (pc.isBlack == isBlack)
                 {
-                    if (pc.pieces.Count > 1)
-                        score+=1;
+                    if (isBlack)
+                        score += (24 - pc.position)/6;
                     else
-                        score-=2;
+                        score += (pc.position + 1)/6;
                 }
+            }else if(pc.pieces.Count == 1)
+            {
+                if (isBlack)
+                    score -= (24 - pc.position)/6;
+                else
+                    score -= (pc.position + 1)/6;
             }
         }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameControl : MonoBehaviour
 {
@@ -22,9 +23,12 @@ public class GameControl : MonoBehaviour
     public PieceContainerObject blackJailControl;
     public PieceContainerObject blackBaseControl;
 
+    private bool gameOver;
+
     //Awake is called before Start
     private void Awake()
     {
+        gameOver = false;
         GetAllSpots();
         SetBaseSpots();
         SetJailSpots();
@@ -42,17 +46,30 @@ public class GameControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (currentMover.winner)
-            SetMessage((currentMover.isBlack ? "Black " : "White ") + "wins!");
-        else if (currentMover.turnOver)
-            currentMover.GetComponentInChildren<MeshRenderer>().enabled = false;
-        else if (!currentMover.diceRolled && !currentMover.playerRolledDice && !cam.flipping)
+        if (!gameOver)
         {
-            SetMessage((currentMover.isBlack ? "Black: " : "White: ") + "Press space bar to roll dice");
-            BlankDiceRollDisplays();
+            if (currentMover.winner)
+            {
+                gameOver = true;
+                AudioSource audioSource = GetComponent<AudioSource>();
+                AudioClip audioClip = Resources.Load<AudioClip>("win");
+                audioSource.PlayOneShot(audioClip);
+                SetMessage((currentMover.isBlack ? "Black " : "White ") + "wins!\nPress space bar to play again");
+                blackMover.SetActive(false);
+                whiteMover.SetActive(false);
+            }    
+            else if (currentMover.turnOver)
+                currentMover.GetComponentInChildren<MeshRenderer>().enabled = false;
+            else if (!currentMover.diceRolled && !currentMover.playerRolledDice && !cam.flipping)
+            {
+                SetMessage((currentMover.isBlack ? "Black: " : "White: ") + "Press space bar to roll dice");
+                BlankDiceRollDisplays();
+            }
+            else
+                SetMessage("");
         }
-        else
-            SetMessage("");
+        else if (Input.GetKeyDown(KeyCode.Space))
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     void FindDice()

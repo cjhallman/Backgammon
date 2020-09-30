@@ -11,7 +11,11 @@ public class HumanPlayer : Player
     public override void RollDice()
     {
         if (Input.GetKeyDown(KeyCode.Space))
+        {
+            moveCont.PlaySound("shakedice");
             moveCont.playerRolledDice = true;
+            moveCont.PlaySound("dice");
+        }   
     }
 
     public override void PickPieceOrSpot()

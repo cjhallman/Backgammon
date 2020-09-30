@@ -23,6 +23,7 @@ public class MoveControl : MonoBehaviour
     private PieceContainerObject baseControl;
     private Player player;
     private MeshRenderer meshRend;
+    private AudioSource audioSource;
 
     //This is how to keep track of which rolls has been used
     public bool[] rollsUsed; 
@@ -50,6 +51,10 @@ public class MoveControl : MonoBehaviour
 
         //Declare length of 4 for doubles
         rollsUsed = new bool[4];
+
+        //Set audio objects
+        audioSource = gameMaster.GetComponent<AudioSource>();
+        
     }
 
     // Update is called once per frame
@@ -100,6 +105,7 @@ public class MoveControl : MonoBehaviour
 
     public void CancelSelection()
     {
+        PlaySound("selectionPiece");
         meshRend.material.color = Color.red;
         currentPiece.transform.parent = oldParent;
         oldSpot.changed = true;
@@ -108,6 +114,7 @@ public class MoveControl : MonoBehaviour
 
     public void SelectNextSpot(string direction)
     {
+        PlaySound("togglePiece");
         /*If there is a piece available in the direction chosen pick that one,
         *else move to next spot also in that direction and pick the first piece based on direction*/
         switch (direction)
@@ -160,6 +167,7 @@ public class MoveControl : MonoBehaviour
 
     public void SelectNextMove(string direction)
     {
+        PlaySound("togglePiece");
         /*If there is a spot in the direction chosen move there
              * else loop to around list to first/last spot*/
         switch (direction)
@@ -186,6 +194,7 @@ public class MoveControl : MonoBehaviour
 
     public void SelectPiece()
     {
+        PlaySound("selectionPiece");
         //Set possible moves for piece selected
         oldSpot = currentSpot;
         //Save old parent of piece and set new parent to mover so piece moves with it
@@ -198,6 +207,7 @@ public class MoveControl : MonoBehaviour
 
     public void SelectMove()
     {
+        PlaySound("selectionPiece");
         foreach (PieceContainerObject pc in availableMoves)
             pc.Outline(false);
         //Calc Spots Moved (use abs because direction for white/black are opposite)
@@ -281,8 +291,8 @@ public class MoveControl : MonoBehaviour
         initialSet = true;
     }
 
-    IEnumerator RollDice() {
-        //This will run on every update in the 1 second(s) it takes to set RiceRolled = true 
+    IEnumerator RollDice() { 
+        //This will run on every update in the 1 second(s) it takes to set RiceRolled = true
         diceViewed = false;
 
         //Pick a random number between 1->6 for each dice
@@ -385,6 +395,13 @@ public class MoveControl : MonoBehaviour
         foreach (PieceContainerObject pco in availableSpots)
             pcList.Add(pco.pcc);
         return pcList;
+    }
+
+    public void PlaySound(string soundName)
+    {
+        //play sound
+        AudioClip audioClip = Resources.Load<AudioClip>(soundName);
+        audioSource.PlayOneShot(audioClip);
     }
 
 }

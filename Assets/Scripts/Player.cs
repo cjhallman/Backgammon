@@ -24,7 +24,9 @@ public abstract class Player
 
     public virtual void RollDice()
     {
+        moveCont.PlaySound("shakeDice");
         moveCont.playerRolledDice = true;
+        moveCont.PlaySound("dice");
     }
 
     public virtual void CancelInquiry()
