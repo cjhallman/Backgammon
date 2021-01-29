@@ -31,7 +31,7 @@ public class MoveControl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //Black goes first
+        //Black rolls one die first
         myTurn = isBlack;
 
         //Set jailControl and baseControl variable based on color
@@ -64,20 +64,53 @@ public class MoveControl : MonoBehaviour
         {
             if (myTurn)
             {
-                gameMaster.currentMover = this;
+                if(gameMaster.currentMover != this)
+                    gameMaster.currentMover = this;
 
                 if (turnOver)
-                    player.TurnOver();
+                    gameMaster.SwitchTurns();
                 else
                 {
-                    //Roll dice if they haven't been yet
-                    if (!diceRolled)
+                    if (gameMaster.gameStart)
+                    {
+                        if (!diceRolled)
+                        {
+                            if (playerRolledDice)
+                                StartCoroutine(RollDie());
+                            else
+                                player.RollDice();
+                        }
+                        else if (diceViewed)
+                        {
+                            StopAllCoroutines();
+                            if (isBlack)
+                                turnOver = true;
+                            else {
+                                int largerFirstRoll = gameMaster.GetLargerFirstRoll();
+                                if(largerFirstRoll == 0)
+                                {
+                                    turnOver = true;
+                                }else{
+                                    if (largerFirstRoll == roll2)
+                                        diceRolled = diceViewed = playerRolledDice = false;
+                                    else
+                                        turnOver = true;
+                                    gameMaster.gameStart = false;
+                                }
+                            }
+                        }
+                    }
+                    //Dice have not been rolled for this turn yet
+                    else if (!diceRolled)
                     {
                         if (playerRolledDice)
+                            //Player rolled dice
                             StartCoroutine(RollDice());
                         else
+                            //Waiting for player to roll dice
                             player.RollDice();
-                    }else if (diceViewed && !listsSet)
+                    }
+                    else if (diceViewed && !listsSet)
                         //Set list of available spots and pieces
                         SetAvailableLists();
                     else if (listsSet & !initialSet)
@@ -291,8 +324,29 @@ public class MoveControl : MonoBehaviour
         initialSet = true;
     }
 
+    IEnumerator RollDie()
+    {
+        //This will run on every update in the 1 second(s) it takes to set DiceRolled = true
+        diceViewed = false;
+
+        //Pick a random number between 1->6 for 1 dice
+        if (isBlack)
+            roll1 = Random.Range(1, 6);
+        else
+            roll2 = Random.Range(1, 6);
+
+        //Have gameMaster control displaying the role
+        gameMaster.DisplayDie(isBlack);
+
+        //Wait a little to simulate real dice roll
+        yield return new WaitForSecondsRealtime(1f);
+        diceRolled = true;
+        yield return new WaitForSecondsRealtime(.5f);
+        diceViewed = true;
+    }
+
     IEnumerator RollDice() { 
-        //This will run on every update in the 1 second(s) it takes to set RiceRolled = true
+        //This will run on every update in the 1 second(s) it takes to set DiceRolled = true
         diceViewed = false;
 
         //Pick a random number between 1->6 for each dice

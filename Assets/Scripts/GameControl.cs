@@ -24,11 +24,13 @@ public class GameControl : MonoBehaviour
     public PieceContainerObject blackBaseControl;
 
     private bool gameOver;
+    public bool gameStart;
 
     //Awake is called before Start
     private void Awake()
     {
         gameOver = false;
+        gameStart = true;
         GetAllSpots();
         SetBaseSpots();
         SetJailSpots();
@@ -48,7 +50,18 @@ public class GameControl : MonoBehaviour
     {
         if (!gameOver)
         {
-            if (currentMover.winner)
+            if (gameStart)
+            {
+                //Deciding who goes first
+                if (!currentMover.diceRolled && !currentMover.playerRolledDice & !cam.flipping)
+                {
+                    SetMessage((currentMover.isBlack ? "Black: " : "White: ") + "Press space bar to roll 1 die");
+                }
+                else {
+                    SetMessage("");
+                }
+            }
+            else if (currentMover.winner)
             {
                 gameOver = true;
                 AudioSource audioSource = GetComponent<AudioSource>();
@@ -72,12 +85,26 @@ public class GameControl : MonoBehaviour
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
+    public int GetLargerFirstRoll()
+    {
+        if (die1.curRollNum == die2.curRollNum)
+            return 0;
+        else return Mathf.Max(die1.curRollNum, die2.curRollNum);
+    }
+
     void FindDice()
     {
         die1 = GameObject.Find("DiceRoll1").GetComponent<DiceControl>();
         die2 = GameObject.Find("DiceRoll2").GetComponent<DiceControl>();
         die3 = GameObject.Find("DiceRoll3").GetComponent<DiceControl>();
         die4 = GameObject.Find("DiceRoll4").GetComponent<DiceControl>();
+    }
+    public void DisplayDie(bool one)
+    {
+        if (one)
+            die1.SetSprite(currentMover.roll1);
+        else
+            die2.SetSprite(currentMover.roll2);
     }
 
     public void DisplayDice()
@@ -110,7 +137,6 @@ public class GameControl : MonoBehaviour
                 allSpots[((x - 1) * 6 + z) - 1] = pobj;
                 pobj.enabled = true;
             }
-                
         }
     }
 

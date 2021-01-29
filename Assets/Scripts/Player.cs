@@ -17,11 +17,6 @@ public abstract class Player
         moveCont = paramMoveCont;
     }
 
-    public void TurnOver()
-    {
-        moveCont.gameMaster.SwitchTurns();
-    }
-
     public virtual void RollDice()
     {
         moveCont.PlaySound("shakeDice");

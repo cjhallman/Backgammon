@@ -6,6 +6,7 @@ public class DiceControl : MonoBehaviour
 {
     private SpriteRenderer spr;
     public Sprite r1, r2, r3, r4, r5, r6;
+    public int curRollNum = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,6 +22,7 @@ public class DiceControl : MonoBehaviour
 
     public void SetSprite(int rollnum)
     {
+        curRollNum = rollnum;
         switch(rollnum){
             case 1:
                 spr.sprite = r1;
