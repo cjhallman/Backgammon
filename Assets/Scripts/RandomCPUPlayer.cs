@@ -6,7 +6,7 @@ public class RandomCPUPlayer : Player
 {
     private int rand = -1;
 
-    public override void PickPieceOrSpot()
+    public override void PickPieceOrSpot(bool input)
     {
         //Select random piece or spot
         if (listenForPick)

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SimpleCPUPlayer : Player
 {
-    public override void PickPieceOrSpot()
+    public override void PickPieceOrSpot(bool input)
     {
         //Select first piece or spot
         if (listenForPick)

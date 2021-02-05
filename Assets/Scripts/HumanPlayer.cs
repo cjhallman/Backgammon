@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HumanPlayer : Player 
 {
@@ -8,25 +9,23 @@ public class HumanPlayer : Player
     {
         secondsToWait = .1f;
     }
-    public override void RollDice()
+    public override void RollDiceInquiry()
     {
         if (Input.GetKeyDown(KeyCode.Space))
-        {
-            moveCont.PlaySound("shakedice");
-            moveCont.playerRolledDice = true;
-            moveCont.PlaySound("dice");
-        }   
+            moveCont.RollDice();
     }
 
-    public override void PickPieceOrSpot()
+    public override void PickPieceOrSpot(bool input)
     {
+        if(moveCont.gameMaster.controlButtons != null)
+            moveCont.gameMaster.controlButtons.SetActive(true);
         //Select the next available piece or spot to move piece
         if (Input.GetKeyDown(KeyCode.UpArrow))
             SelectNext("Up");
         if (Input.GetKeyDown(KeyCode.DownArrow))
             SelectNext("Down");
         //Select/Deselect piece or roll dice
-        if (Input.GetKeyDown(KeyCode.Space) && listenForPick)
+        if ((Input.GetKeyDown(KeyCode.Space)||input) && listenForPick)
         {
             listenForPick = false;
             if (!pieceSelected)

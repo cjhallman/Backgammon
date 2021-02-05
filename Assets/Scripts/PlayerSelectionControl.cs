@@ -30,39 +30,54 @@ public class PlayerSelectionControl : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
+            Arrow(true);
+        }
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            Arrow(false);
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Select();
+        }
+
+    }
+
+    public void Arrow(bool right)
+    {
+        if (right)
+        {
             typeIndex++;
             if (typeIndex >= playerTypes.Length)
                 typeIndex = 0;
-            playerTypeText.text = playerTypes[typeIndex];
-            //Play sound
-            audioSource.PlayOneShot(toggleAudio);
         }
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        else
         {
             typeIndex--;
             if (typeIndex < 0)
                 typeIndex = playerTypes.Length - 1;
-            playerTypeText.text = playerTypes[typeIndex];
-            //Play sound
-            audioSource.PlayOneShot(toggleAudio);
         }
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            audioSource.PlayOneShot(selectionAudio);
-            if (colorText.text == "Black")
-            {
-                gameMaster.blackMover.GetComponent<MoveControl>().SetPlayer(playerTypes[typeIndex]);
-                colorText.text = "White";
-                typeIndex = 0;
-                playerTypeText.text = playerTypes[typeIndex];
-            }
-            else
-            {
-                gameMaster.whiteMover.GetComponent<MoveControl>().SetPlayer(playerTypes[typeIndex]);
-                gameMaster.enabled = true;
-                this.gameObject.SetActive(false);
-            } 
-        }
+        
+        playerTypeText.text = playerTypes[typeIndex];
+        //Play sound
+        audioSource.PlayOneShot(toggleAudio);
+    }
 
+    public void Select()
+    {
+        audioSource.PlayOneShot(selectionAudio);
+        if (colorText.text == "Black")
+        {
+            gameMaster.blackMover.GetComponent<MoveControl>().SetPlayer(playerTypes[typeIndex]);
+            colorText.text = "White";
+            typeIndex = 0;
+            playerTypeText.text = playerTypes[typeIndex];
+        }
+        else
+        {
+            gameMaster.whiteMover.GetComponent<MoveControl>().SetPlayer(playerTypes[typeIndex]);
+            gameMaster.enabled = true;
+            this.gameObject.SetActive(false);
+        }
     }
 }

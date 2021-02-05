@@ -26,11 +26,15 @@ public class GameControl : MonoBehaviour
     private bool gameOver;
     public bool gameStart;
 
+    private bool mobile;
+    public GameObject controlButtons;
+
     //Awake is called before Start
     private void Awake()
     {
         gameOver = false;
         gameStart = true;
+        mobile = SceneManager.GetActiveScene().name.EndsWith("Mobile");
         GetAllSpots();
         SetBaseSpots();
         SetJailSpots();
@@ -55,7 +59,11 @@ public class GameControl : MonoBehaviour
                 //Deciding who goes first
                 if (!currentMover.diceRolled && !currentMover.playerRolledDice & !cam.flipping)
                 {
-                    SetMessage((currentMover.isBlack ? "Black: " : "White: ") + "Press space bar to roll 1 die");
+                    if(!mobile)
+                        SetMessage((currentMover.isBlack ? "Black: " : "White: ") + "Press space bar to roll 1 die");
+                    else
+                        SetMessage((currentMover.isBlack ? "Black: " : "White: ") + "Roll 1 die");
+
                 }
                 else {
                     SetMessage("");
@@ -67,15 +75,21 @@ public class GameControl : MonoBehaviour
                 AudioSource audioSource = GetComponent<AudioSource>();
                 AudioClip audioClip = Resources.Load<AudioClip>("win");
                 audioSource.PlayOneShot(audioClip);
-                SetMessage((currentMover.isBlack ? "Black " : "White ") + "wins!\nPress space bar to play again");
+                if(!mobile)
+                    SetMessage((currentMover.isBlack ? "Black " : "White ") + "wins!\nPress space bar to play again");
+                else
+                    SetMessage((currentMover.isBlack ? "Black " : "White ") + "wins!\nPlay again?");
                 blackMover.SetActive(false);
                 whiteMover.SetActive(false);
             }    
             else if (currentMover.turnOver)
                 currentMover.GetComponentInChildren<MeshRenderer>().enabled = false;
-            else if (!currentMover.diceRolled && !currentMover.playerRolledDice && !cam.flipping)
+            else if (!currentMover.diceRolled && !currentMover.playerRolledDice && !cam.flipping && currentMover.myTurn)
             {
-                SetMessage((currentMover.isBlack ? "Black: " : "White: ") + "Press space bar to roll dice");
+                if(!mobile)
+                    SetMessage((currentMover.isBlack ? "Black: " : "White: ") + "Press space bar to roll dice");
+                else
+                    SetMessage((currentMover.isBlack ? "Black: " : "White: ") + "Roll dice");
                 BlankDiceRollDisplays();
             }
             else
@@ -118,7 +132,7 @@ public class GameControl : MonoBehaviour
         die4.SetSprite(extraDice);
     }
 
-    void BlankDiceRollDisplays()
+    public void BlankDiceRollDisplays()
     {
         die1.GetComponent<DiceControl>().SetSprite(0);
         die2.GetComponent<DiceControl>().SetSprite(0);
@@ -165,13 +179,35 @@ public class GameControl : MonoBehaviour
     public void SetMessage(string message)
     {
         uiText.text = message;
+        if (message == "")
+            uiText.gameObject.transform.parent.gameObject.SetActive(false);
+        else
+            uiText.gameObject.transform.parent.gameObject.SetActive(true);
     }
 
     public void SwitchTurns()
     {
         currentMover.myTurn = false;
         currentMover.turnOver = false;
+        if (controlButtons != null)
+            controlButtons.SetActive(false);
         SetMessage("");
         cam.flip();
+        
+    }
+
+    public void CurrentMoverRollDice()
+    {
+        currentMover.RollDice();
+    }
+
+    public void CurrentMoverSelectNext(string direction)
+    {
+        currentMover.SelectNext(direction);
+    }
+
+    public void CurrentMoverSelectPieceOrSpot()
+    {
+        currentMover.PickPieceOrSpot();
     }
 }

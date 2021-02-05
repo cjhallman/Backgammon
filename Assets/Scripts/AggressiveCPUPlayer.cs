@@ -9,7 +9,7 @@ public class AggressiveCPUPlayer : Player
     int ups = -1;
     bool moveChosen = false;
 
-    public override void PickPieceOrSpot()
+    public override void PickPieceOrSpot(bool input)
     {
         if (listenForPick)
         {

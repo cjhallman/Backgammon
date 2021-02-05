@@ -10,18 +10,16 @@ public abstract class Player
     protected bool listenForSelect = true;
     protected float secondsToWait = .5f;
     
-    public abstract void PickPieceOrSpot();
+    public abstract void PickPieceOrSpot(bool input);
 
     public void SetMover(MoveControl paramMoveCont)
     {
         moveCont = paramMoveCont;
     }
 
-    public virtual void RollDice()
+    public virtual void RollDiceInquiry()
     {
-        moveCont.PlaySound("shakeDice");
-        moveCont.playerRolledDice = true;
-        moveCont.PlaySound("dice");
+        moveCont.RollDice();
     }
 
     public virtual void CancelInquiry()

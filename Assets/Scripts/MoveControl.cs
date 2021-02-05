@@ -76,9 +76,9 @@ public class MoveControl : MonoBehaviour
                         if (!diceRolled)
                         {
                             if (playerRolledDice)
-                                StartCoroutine(RollDie());
+                                StartCoroutine(RollDieCR());
                             else
-                                player.RollDice();
+                                player.RollDiceInquiry();
                         }
                         else if (diceViewed)
                         {
@@ -90,6 +90,7 @@ public class MoveControl : MonoBehaviour
                                 if(largerFirstRoll == 0)
                                 {
                                     turnOver = true;
+                                    gameMaster.BlankDiceRollDisplays();
                                 }else{
                                     if (largerFirstRoll == roll2)
                                         diceRolled = diceViewed = playerRolledDice = false;
@@ -105,10 +106,10 @@ public class MoveControl : MonoBehaviour
                     {
                         if (playerRolledDice)
                             //Player rolled dice
-                            StartCoroutine(RollDice());
+                            StartCoroutine(RollDiceCR());
                         else
                             //Waiting for player to roll dice
-                            player.RollDice();
+                            player.RollDiceInquiry();
                     }
                     else if (diceViewed && !listsSet)
                         //Set list of available spots and pieces
@@ -118,7 +119,7 @@ public class MoveControl : MonoBehaviour
                         SetInitialLocation();
                     else if (listsSet & initialSet)
                         //Enough time has passed for player to see result of dice
-                        player.PickPieceOrSpot();
+                        player.PickPieceOrSpot(false);
 
                     player.CancelInquiry();
 
@@ -324,7 +325,7 @@ public class MoveControl : MonoBehaviour
         initialSet = true;
     }
 
-    IEnumerator RollDie()
+    IEnumerator RollDieCR()
     {
         //This will run on every update in the 1 second(s) it takes to set DiceRolled = true
         diceViewed = false;
@@ -345,7 +346,7 @@ public class MoveControl : MonoBehaviour
         diceViewed = true;
     }
 
-    IEnumerator RollDice() { 
+    IEnumerator RollDiceCR() { 
         //This will run on every update in the 1 second(s) it takes to set DiceRolled = true
         diceViewed = false;
 
@@ -456,6 +457,24 @@ public class MoveControl : MonoBehaviour
         //play sound
         AudioClip audioClip = Resources.Load<AudioClip>(soundName);
         audioSource.PlayOneShot(audioClip);
+    }
+
+    public void RollDice()
+    {
+        PlaySound("shakeDice");
+        playerRolledDice = true;
+        PlaySound("dice");
+    }
+
+    public void SelectNext(string direction)
+    {
+        if(listsSet & initialSet)
+            player.SelectNext(direction);
+    }
+
+    public void PickPieceOrSpot()
+    {
+        player.PickPieceOrSpot(true);
     }
 
 }
