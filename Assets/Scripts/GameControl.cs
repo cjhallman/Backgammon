@@ -78,7 +78,7 @@ public class GameControl : MonoBehaviour
                 if(!mobile)
                     SetMessage((currentMover.isBlack ? "Black " : "White ") + "wins!\nPress space bar to play again");
                 else
-                    SetMessage((currentMover.isBlack ? "Black " : "White ") + "wins!\nPlay again?");
+                    SetMessage((currentMover.isBlack ? "Black " : "White ") + "wins!Play again?");
                 blackMover.SetActive(false);
                 whiteMover.SetActive(false);
             }    
@@ -198,7 +198,10 @@ public class GameControl : MonoBehaviour
 
     public void CurrentMoverRollDice()
     {
-        currentMover.RollDice();
+        if(!gameOver)
+            currentMover.RollDice();
+        else
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void CurrentMoverSelectNext(string direction)
